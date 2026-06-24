@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tempe 找房整理</title>
+  <style>
+    :root {
+      --bg: #f7f8f5;
+      --paper: #ffffff;
+      --ink: #20251f;
+      --muted: #667064;
+      --line: #d9ded4;
+      --green: #315d43;
+      --green-soft: #e5efe8;
+      --blue: #2f5975;
+      --blue-soft: #e6eef4;
+      --amber: #7a5625;
+      --amber-soft: #f3eadb;
+      --red: #8a3a33;
+      --red-soft: #f3e4e2;
+      --shadow: 0 14px 36px rgba(32, 37, 31, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr;
+      gap: 24px;
+      align-items: end;
+      padding: 28px 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.06rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    .lede {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .status-panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .status-panel strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card .price {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--green);
+      margin: 10px 0 2px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag.blue {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .tag.amber {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .tag.red {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    section {
+      margin-top: 30px;
+    }
+
+    .section-band {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    th,
+    td {
+      padding: 13px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef2eb;
+      color: #334036;
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .rank {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      font-weight: 700;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .post-box {
+      background: #fbfcfa;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      white-space: pre-wrap;
+      font-family: "Courier New", monospace;
+      font-size: 0.95rem;
+      overflow-x: auto;
+    }
+
+    .source-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .source-list a {
+      display: inline-flex;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 0.9rem;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .decision {
+      border-left: 4px solid var(--green);
+      padding-left: 14px;
+    }
+
+    @media (max-width: 900px) {
+      header,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        padding: 22px 14px 42px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-band,
+      .card,
+      .status-panel {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <h1>Tempe 找房整理</h1>
+        <p class="lede">整理目前考慮的長租、分租與短租過渡方案。重點是先排除詐騙風險，再比較總月費、通勤、室友與合約彈性。</p>
+      </div>
+      <aside class="status-panel">
+        <strong>目前建議</strong>
+        <p>先主攻 312 S Wilson St 找室友；同時把 1025 S Siesta Ln 當備選。1115 E Lemon St 只走官方管道確認，不先付 Facebook 對方費用。Airbnb 適合當 7-14 天落地緩衝。</p>
+      </aside>
+    </header>
+
+    <section class="grid" aria-label="快速比較">
+      <article class="card">
+        <h3>312 S Wilson St</h3>
+        <p class="price">$700-$750 / 人</p>
+        <p class="note">找到室友後的估算。兩人住 $1500；兩人簽兩年約 $1400。</p>
+        <div class="tag-row">
+          <span class="tag">首選長租</span>
+          <span class="tag blue">2B1B</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>1025 S Siesta Ln</h3>
+        <p class="price">約 $850</p>
+        <p class="note">5B5B house 分租房。房東回覆後中斷，仍需確認房型與室友。</p>
+        <div class="tag-row">
+          <span class="tag blue">備選</span>
+          <span class="tag amber">資訊未全</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>1115 E Lemon St</h3>
+        <p class="price">$800</p>
+        <p class="note">對方稱含 utilities、押金 $500，但要求先付 $100 才 tour。</p>
+        <div class="tag-row">
+          <span class="tag red">先驗證</span>
+          <span class="tag amber">申請費風險</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Airbnb Room #4</h3>
+        <p class="price">依日期</p>
+        <p class="note">Superhost，適合先到 Tempe 再實地找房。</p>
+        <div class="tag-row">
+          <span class="tag blue">短租過渡</span>
+          <span class="tag">平台付款</span>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h2>房源比較表</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>排序</th>
+              <th>房源</th>
+              <th>價格</th>
+              <th>已知資訊</th>
+              <th>優點</th>
+              <th>風險 / 待確認</th>
+              <th>下一步</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="rank">1</span></td>
+              <td><strong>312 S Wilson St, Tempe</strong><br>玟瑞姊提供</td>
+              <td>一人住 $1400<br>兩人住 $1500<br>兩人簽兩年 $1400</td>
+              <td>2 bed / 1 bath apartment，約 856 sqft。Zillow 資訊顯示近 ASU、Mill Ave、Tempe Town Lake；有 in-unit washer/dryer、廚房設備、covered parking。</td>
+              <td>如果找到室友，每人約 $700-$750，隱私與穩定性比多人分租好。</td>
+              <td>水電網是否另計、押金、家具、合約人、提前退租、是否可轉租都還要確認。Zillow 顯示 off market，需以玟瑞姊現況為準。</td>
+              <td>先發徵室友貼文。有人有興趣後，約看房或視訊看房，確認 lease 條件。</td>
+            </tr>
+            <tr>
+              <td><span class="rank">2</span></td>
+              <td><strong>1025 S Siesta Ln, Tempe</strong><br>Facebook / HotPads / Trulia</td>
+              <td>約 $850 / 月<br>可能另有費用</td>
+              <td>5 bed / 5 bath house 裡的 private room。房東說有幾間八月空出，一間現在可入住；有些共用衛浴，有一間較大且有自己的 kitchen / larger space。</td>
+              <td>近 ASU / Mill Ave / Tempe Town Lake / Sky Harbor，單人一房，選房型彈性較高。</td>
+              <td>房東後來沒有回覆；新室友資料不清楚；每間房價格、浴室、押金、租期與 utilities 需逐一確認。</td>
+              <td>再追問一次具體房型與價格。若 24-48 小時仍不回，暫時降優先級。</td>
+            </tr>
+            <tr>
+              <td><span class="rank">3</span></td>
+              <td><strong>Airbnb Prime Tempe Room #4</strong><br>Steven / The 6th Street Retreat</td>
+              <td>依入住日期計算<br>需看總價含稅費</td>
+              <td>Private room in home，2 guests max，1 bedroom，1 queen bed，1 shared bath。房東為 Superhost，房源 4.75 / 32 reviews，host 4.89 / 530 reviews。</td>
+              <td>平台付款相對安全，適合先住 7-14 天，到了 Tempe 後再實地看長租。</td>
+              <td>長住可能比長租貴；共用衛浴；地址訂房後才提供；不適合當長期方案。</td>
+              <td>輸入抵達日期算總價。若長租出發前仍未定，就訂短期緩衝。</td>
+            </tr>
+            <tr>
+              <td><span class="rank">4</span></td>
+              <td><strong>1115 E Lemon St, Tempe</strong><br>Facebook / University Valley 地址</td>
+              <td>$800 / 月含 utilities<br>押金 $500<br>申請費 $100</td>
+              <td>對方回覆地址為 1115 E Lemon St，稱 30-day written notice、租金上漲也提前 30 天通知。</td>
+              <td>地點靠 ASU，價格很低，若是真的會很有吸引力。</td>
+              <td>要求先完成 application 和 refundable $100 fee 才能 tour，是重大風險。需確認對方是否真為 University Valley 官方管理方。</td>
+              <td>不要透過 Facebook 付款。直接打 University Valley 官方電話或寄官方 email 驗證。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <article class="section-band">
+        <h2>312 S Wilson St 徵室友貼文</h2>
+        <div class="post-box">Hi everyone,
+
+I am an ASU student currently looking for a roommate to share a 2-bedroom, 1-bath apartment in Tempe.
+
+About the apartment:
+
+* Address: 312 S Wilson St, Tempe, AZ 85281
+
+* 2 bedrooms / 1 bathroom, around 856 sqft
+
+* Located near ASU, Mill Avenue, Tempe Town Lake, and Loop 202
+
+* In-unit washer and dryer
+
+* Fully equipped kitchen with refrigerator, oven/range, microwave, dishwasher, and other essential appliances
+
+* Tile flooring, no carpet
+
+* Small private backyard and shared outdoor area
+
+* One assigned covered parking space included, with no monthly parking fee according to the listing
+
+About the room:
+
+* You would have your own private bedroom
+
+* The bathroom would be shared
+
+* Furniture status is still to be confirmed
+
+Rent:
+
+* If two people share the apartment, total rent is $1,500/month, so the estimated rent is $750/month per person
+
+* If both roommates sign a 2-year lease, total rent is $1,400/month, so the estimated rent is $700/month per person
+
+* Utilities and other fees are still to be confirmed
+
+About me:
+
+* I am a student at ASU
+
+* I am looking for someone respectful, responsible, and clean
+
+* Social gatherings are okay, but I prefer no loud parties and clear boundaries
+
+Preferred roommate:
+
+* Clean and tidy in shared spaces
+
+* Respectful of quiet hours, privacy, and study/work schedules
+
+* Comfortable communicating clearly about shared expenses and house responsibilities
+
+Leasing:
+
+* Lease details, deposit, utilities, and move-in date will be confirmed with the landlord before signing
+
+* I would prefer someone who is serious about touring the place and reviewing the lease together
+
+Please DM me if you are interested, have questions, or would like to schedule a visit.</div>
+      </article>
+
+      <article class="section-band">
+        <h2>發文前建議補齊</h2>
+        <ul>
+          <li>確認 utilities 是否包含；如果不含，預估水電網每人多少。</li>
+          <li>確認押金金額，以及押金是各付一半還是一人先墊。</li>
+          <li>確認是否有家具，尤其床、桌子、衣櫃。</li>
+          <li>確認 lease 是 12 個月、24 個月，還是可選。</li>
+          <li>確認如果其中一人搬走，能不能找 replacement tenant。</li>
+          <li>確認可入住日期，以及是否能視訊看房。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section-band">
+      <h2>建議行動順序</h2>
+      <div class="decision">
+        <p><strong>第一步：</strong>先用上面的貼文找 312 S Wilson St 的室友。這是最有機會兼顧價格、隱私、穩定性的方案。</p>
+        <p><strong>第二步：</strong>同時追問 1025 S Siesta Ln 的房東，要求列出每間可租房的價格、浴室、押金、租期、utilities、室友狀況。</p>
+        <p><strong>第三步：</strong>1115 E Lemon St 只從 University Valley 官方網站、官方電話或官方 email 查證。確認前不要付款。</p>
+        <p><strong>第四步：</strong>如果出發前還沒定長租，就用 Airbnb 先訂 7-14 天，抵達後實地看房再簽約。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>來源連結</h2>
+      <div class="source-list">
+        <a href="https://www.zillow.com/homedetails/312-S-Wilson-St-Tempe-AZ-85281/65438162_zpid/?view=public">312 S Wilson St / Zillow</a>
+        <a href="https://hotpads.com/1025-s-siesta-ln-tempe-az-85281-1n09rzn/pad-for-sublet">1025 S Siesta Ln / HotPads</a>
+        <a href="https://www.trulia.com/home/1025-s-siesta-ln-tempe-az-85281-7586573">1025 S Siesta Ln / Trulia</a>
+        <a href="https://www.universityvalley.com/">University Valley 官方網站</a>
+        <a href="https://www.airbnb.com/rooms/1532923821219280062">Airbnb Prime Tempe Room #4</a>
+      </div>
+      <p class="note">整理日期：2026-06-24。房源價格與狀態可能變動，簽約或付款前請再次確認。</p>
+    </section>
+  </main>
+</body>
+</html>
