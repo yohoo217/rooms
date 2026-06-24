@@ -1,5 +1,5 @@
-# Tempe Housing Options
+# rooms
 
-Single-page housing comparison for Tempe / ASU-area housing options.
+Tempe / ASU-area housing comparison page.
 
-Open `index.html` locally, or publish this repository with GitHub Pages from the `main` branch root.
+The GitHub Pages entry file is `index.html`.
