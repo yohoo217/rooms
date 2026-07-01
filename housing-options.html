@@ -3,151 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tempe 找房地圖</title>
+  <title>Tempe 房源比較</title>
   <style>
-    :root { --ink:#17211b; --muted:#66736b; --line:#d9e0dc; --soft:#f5f8f6; --green:#177744; --green-soft:#eaf5ed; --amber:#a76412; --amber-soft:#fff4df; --red:#b63b24; --red-soft:#fff0ec; --shadow:0 18px 50px rgba(23,33,27,.08); }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; color:var(--ink); background:#fff; font:15px/1.5 Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; }
-    button, select { font:inherit; }
-    a { color:var(--green); text-underline-offset:3px; }
-    .shell { min-height:100vh; padding:28px; }
-    header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; max-width:1600px; margin:0 auto 22px; }
-    h1 { margin:0; font-size:clamp(2rem,4vw,3.25rem); line-height:1; letter-spacing:-.045em; }
-    .sub { margin:10px 0 0; color:var(--muted); font-size:1.05rem; }
-    .header-link { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--green); border-radius:8px; color:var(--green); text-decoration:none; white-space:nowrap; font-weight:700; }
-    .filters { display:flex; flex-wrap:wrap; gap:10px; max-width:1600px; margin:0 auto 18px; }
-    .filter { min-width:170px; padding:11px 36px 11px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); }
-    .count { display:flex; align-items:center; margin-left:auto; color:var(--muted); }
-    .layout { display:grid; grid-template-columns:minmax(360px,42%) minmax(680px,58%); gap:16px; max-width:1600px; margin:auto; align-items:start; }
-    .map-panel { position:sticky; top:16px; height:calc(100vh - 32px); min-height:720px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--soft); box-shadow:var(--shadow); }
-    .map-frame { width:100%; height:52%; border:0; display:block; background:#e8eeea; }
-    .map-head { position:absolute; top:14px; left:14px; right:14px; display:flex; justify-content:space-between; gap:10px; pointer-events:none; }
-    .map-label { padding:8px 10px; background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:7px; box-shadow:0 6px 20px rgba(0,0,0,.08); font-size:.82rem; font-weight:800; }
-    .location-list { height:48%; overflow:auto; padding:12px; background:#fff; border-top:1px solid var(--line); }
-    .location-item { width:100%; display:grid; grid-template-columns:32px 1fr auto; gap:10px; align-items:center; padding:11px 10px; border:0; border-bottom:1px solid #edf0ee; background:transparent; text-align:left; color:var(--ink); cursor:pointer; }
-    .location-item:hover, .location-item.active { background:var(--green-soft); }
-    .pin { width:30px; height:30px; display:grid; place-items:center; border-radius:50%; background:#fff; border:1.5px solid var(--green); color:var(--green); font-weight:800; }
-    .active .pin { color:#fff; background:var(--green); }
-    .loc-name { display:block; font-weight:800; }
-    .loc-address { display:block; color:var(--muted); font-size:.78rem; }
-    .loc-distance { color:var(--muted); font-size:.8rem; white-space:nowrap; }
-    .content { min-width:0; }
-    .summary { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
-    .summary div { padding:13px 14px; border:1px solid var(--line); border-radius:9px; }
-    .summary strong { display:block; font-size:1.25rem; color:var(--green); }
-    .summary span { color:var(--muted); font-size:.8rem; }
-    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:#fff; box-shadow:var(--shadow); }
-    table { width:100%; min-width:1050px; border-collapse:collapse; }
-    th, td { padding:12px 11px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
-    th { position:sticky; top:0; z-index:2; background:#f4f7f5; color:#425047; font-size:.75rem; letter-spacing:.025em; text-transform:uppercase; }
-    tbody tr { cursor:pointer; transition:background .15s ease; }
-    tbody tr:hover, tbody tr.selected { background:#f0f8f2; }
-    tbody tr.selected td:first-child { box-shadow:inset 4px 0 var(--green); }
-    .property { font-weight:800; }
-    .address { display:block; margin-top:3px; color:var(--muted); font-size:.78rem; }
-    .total { color:var(--green); font-weight:850; white-space:nowrap; }
-    .source-links { display:flex; flex-wrap:wrap; gap:5px 8px; max-width:160px; }
-    .source-links a { font-size:.76rem; }
-    .status { display:inline-flex; align-items:center; gap:6px; font-size:.76rem; white-space:nowrap; }
-    .status::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--green); }
-    .status.verify::before { background:var(--amber); }
-    .status.risk::before { background:var(--red); }
-    .empty { padding:36px; text-align:center; color:var(--muted); }
-    .notes { margin-top:14px; padding:17px 18px; border:1px solid var(--line); border-radius:10px; background:var(--soft); }
-    .notes h2 { margin:0 0 8px; font-size:1rem; }
-    .notes p { margin:5px 0; color:var(--muted); font-size:.86rem; }
-    .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:10px; color:var(--muted); font-size:.78rem; }
-    @media (max-width:1100px) { .shell{padding:18px}.layout{grid-template-columns:1fr}.map-panel{position:relative;top:0;height:670px;min-height:0}.content{min-width:0}.count{width:100%;margin-left:0}.summary{grid-template-columns:repeat(3,1fr)} }
-    @media (max-width:620px) { .shell{padding:14px}header{align-items:flex-start;flex-direction:column}.header-link{width:100%;justify-content:center}.filters{display:grid;grid-template-columns:1fr 1fr}.filter{min-width:0;width:100%}.count{grid-column:1/-1}.map-panel{height:610px}.map-frame{height:47%}.location-list{height:53%}.summary{grid-template-columns:1fr}.summary div{display:flex;justify-content:space-between;align-items:center} }
+    :root{--ink:#17211b;--muted:#68746d;--line:#d9e0dc;--soft:#f5f8f6;--green:#177744;--amber:#a76412;--red:#b63b24}
+    *{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}a{color:var(--green);text-underline-offset:3px}.page{max-width:1560px;margin:auto;padding:34px 28px 60px}header{margin-bottom:32px;border-bottom:1px solid var(--line);padding-bottom:24px}h1{margin:0;font-size:clamp(2rem,4vw,3.4rem);line-height:1;letter-spacing:-.04em}header p{margin:12px 0 0;color:var(--muted);font-size:1.05rem}.section{margin-top:34px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:12px}.section h2{margin:0;font-size:1.45rem}.section-note{margin:0;color:var(--muted);font-size:.88rem}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}.data-table{width:100%;min-width:1180px;border-collapse:collapse}.data-table th,.data-table td{padding:13px 12px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}.data-table th{background:var(--soft);color:#455249;font-size:.76rem;letter-spacing:.025em;text-transform:uppercase;white-space:nowrap}.data-table tbody tr:hover{background:#f8fbf9}.data-table tr:last-child td{border-bottom:0}.name{font-weight:800}.address{display:block;margin-top:3px;color:var(--muted);font-size:.8rem}.map-link{display:inline-block;margin-top:5px;font-size:.78rem}.total{font-weight:850;color:var(--green);white-space:nowrap}.source-links{display:flex;flex-wrap:wrap;gap:5px 9px;max-width:180px}.source-links a{font-size:.78rem}.status{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:750;white-space:nowrap}.status:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}.status.verify:before{background:var(--amber)}.status.risk:before{background:var(--red)}.detail{display:block;margin-top:5px;max-width:250px;color:var(--muted);font-size:.78rem}.footer{margin-top:24px;padding:16px 18px;background:var(--soft);border:1px solid var(--line);border-radius:9px;color:var(--muted);font-size:.86rem}.footer p{margin:4px 0}@media(max-width:700px){.page{padding:24px 14px 44px}.section-head{align-items:flex-start;flex-direction:column}.data-table{min-width:1050px}}
   </style>
 </head>
 <body>
-  <main class="shell">
-    <header>
-      <div><h1>Tempe 找房地圖</h1><p class="sub">ASU Tempe 周邊房源，一張表比較地址、距離與每月總成本。</p></div>
-      <a class="header-link" id="open-map" href="https://www.google.com/maps/search/?api=1&query=ASU+Tempe+housing" target="_blank" rel="noopener">↗ 開啟 Google Maps</a>
-    </header>
+  <main class="page">
+    <header><h1>Tempe 房源比較</h1><p>全部資料只分成 Facebook／私人來源與其他租屋平台來源；每筆直接比較地址、ASU Tempe 距離與預估總月費。</p></header>
 
-    <section class="filters" aria-label="房源篩選">
-      <select class="filter" id="type-filter" aria-label="房型"><option value="all">全部房型</option><option value="student">學生分租</option><option value="room">私人房間</option><option value="studio">Studio / 1BR</option></select>
-      <select class="filter" id="price-filter" aria-label="總月費"><option value="9999">全部總月費</option><option value="900">總月費 ≤ $900</option><option value="1100" selected>總月費 ≤ $1,100</option><option value="1300">總月費 ≤ $1,300</option></select>
-      <select class="filter" id="distance-filter" aria-label="距離"><option value="99">全部距離</option><option value="1">距校園 ≤ 1 mile</option><option value="2" selected>距校園 ≤ 2 miles</option><option value="3">距校園 ≤ 3 miles</option></select>
-      <span class="count" id="count"></span>
+    <section class="section" id="facebook">
+      <div class="section-head"><div><h2>1. Facebook／私人來源房源比較</h2><p class="section-note">未經官方 leasing office 驗證前，不支付申請費、押金或保留費。</p></div></div>
+      <div class="table-wrap"><table class="data-table"><thead><tr><th>房源／地址</th><th>房型</th><th>距 ASU</th><th>刊登租金</th><th>預估總月費</th><th>來源連結</th><th>條件／風險</th></tr></thead><tbody id="facebook-body"></tbody></table></div>
     </section>
 
-    <div class="layout">
-      <aside class="map-panel" aria-label="Google Maps 房源位置">
-        <iframe class="map-frame" id="map-frame" title="選取房源 Google Map" loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <div class="map-head"><span class="map-label">Google Maps · 點選下方房源切換</span></div>
-        <div class="location-list" id="location-list"></div>
-      </aside>
+    <section class="section" id="platforms">
+      <div class="section-head"><div><h2>2. 其他平台房源比較</h2><p class="section-note">涵蓋 Apartments.com、Realtor.com、ForRent.com、Rent.com、HotPads、Trulia、Redfin。</p></div></div>
+      <div class="table-wrap"><table class="data-table"><thead><tr><th>房源／地址</th><th>房型</th><th>距 ASU</th><th>刊登租金</th><th>預估總月費</th><th>來源連結</th><th>條件／風險</th></tr></thead><tbody id="platform-body"></tbody></table></div>
+    </section>
 
-      <section class="content">
-        <div class="summary"><div><strong id="best-price">—</strong><span>最低預估月費</span></div><div><strong id="near-count">—</strong><span>1 mile 內房源</span></div><div><strong id="platform-count">7</strong><span>已整理平台</span></div></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>房源 / 地址</th><th>房型</th><th>距 ASU</th><th>刊登租金</th><th>預估總月費</th><th>來源</th><th>狀態</th></tr></thead>
-            <tbody id="listing-body"></tbody>
-          </table>
-          <div class="empty" id="empty" hidden>沒有符合目前篩選條件的房源。</div>
-        </div>
-        <section class="notes">
-          <h2>總月費怎麼算</h2>
-          <p>整戶 Studio / 1BR：租金外加約 $180–$350；學生分租：外加約 $60–$160；私人 house 房間：外加約 $115–$210。包含水、電、網路、垃圾、renter's insurance 與常見必要月費的保守區間。</p>
-          <p>距離為房源地址到 Hayden Library 的約略直線距離；實際步行、騎車與大眾運輸請點房源後在 Google Maps 查詢。優惠價、per-bed 價格與 availability 都須向 leasing office 再確認。</p>
-          <div class="legend"><span class="status">資料較完整</span><span class="status verify">價格／費用待確認</span><span class="status risk">付款或身分風險</span></div>
-        </section>
-      </section>
-    </div>
+    <div class="footer"><p><strong>總月費估算：</strong>Studio／1BR 通常在租金外加 $180–$350；學生分租加 $60–$160；私人 house 房間加 $115–$210。</p><p><strong>距離基準：</strong>房源地址到 Hayden Library 的約略直線距離。點地址下方的 Google Maps 可查實際步行、騎車與大眾運輸。</p></div>
   </main>
-
   <script>
-    const sourceUrls = {
-      Apartments:'https://www.apartments.com/off-campus-housing/az/tempe/arizona-state-university-tempe-campus/under-1000/',
-      Realtor:'https://www.realtor.com/apartments/Tempe_AZ/price-na-1000',
-      ForRent:'https://www.forrent.com/find/az/tempe/apartment/less-than-1000',
-      Rent:'https://www.rent.com/arizona/tempe-apartments/max-price-1000',
-      HotPads:'https://hotpads.com/tempe-az/apartments-under-1000',
-      Trulia:'https://www.trulia.com/for_rent/Tempe%2CAZ/apartments-under-1000/',
-      Redfin:'https://www.redfin.com/city/18607/AZ/Tempe/rentals-under-1000'
-    };
-    const listings = [
-      {name:'Gateway at Tempe',address:'1655 E University Dr, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:1.3,rent:'$745+ / 人',min:805,max:905,sources:['Realtor','Rent','Redfin'],status:'ok',note:'Individual lease；確認 utility cap。'},
-      {name:'1037 S Farmer Ave',address:'1037 S Farmer Ave, Tempe, AZ 85281',type:'studio',label:'1BR · 350 sqft',distance:.6,rent:'$695',min:875,max:1045,sources:['Redfin'],status:'verify',note:'價格明顯偏低，須確認仍可租及是否為整戶。'},
-      {name:'Lofts on 8th',address:'1403 E 8th St, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:1.1,rent:'$899+ / 人',min:959,max:1059,sources:['Apartments'],status:'verify',note:'靠 ASU；確認家具、網路與 parking。'},
-      {name:'The District on Apache',address:'977 E Apache Blvd, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:.7,rent:'$899+ / 人',min:959,max:1059,sources:['Apartments'],status:'verify',note:'近 light rail；確認 utilities allowance。'},
-      {name:'The Molino Apartments',address:'1651 W Baseline Rd, Tempe, AZ 85283',type:'studio',label:'Studio · 315+ sqft',distance:4.0,rent:'$949',min:999,max:1099,sources:['Rent','Redfin'],status:'ok',note:'刊登稱網路與 flat-rate utilities；通勤較遠。'},
-      {name:'VERVE Tempe',address:'1011 E Orange St, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:.7,rent:'$999 total price',min:1059,max:1129,sources:['Apartments'],status:'ok',note:'12-month lease；required fees 已列入。'},
-      {name:'Canvas',address:'1010 E Orange St, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:.6,rent:'$999 / 人',min:1059,max:1159,sources:['Apartments','ForRent'],status:'verify',note:'ASU 東側；確認 utility cap 與 parking。'},
-      {name:'University Pointe',address:'919 E Lemon St, Tempe, AZ 85281',type:'studio',label:'Studio',distance:.5,rent:'$899+',min:1079,max:1249,sources:['Apartments'],status:'verify',note:'離校近；廣告有 1 month free。'},
-      {name:'Sentry Tempe',address:'3730 S Mill Ave, Tempe, AZ 85282',type:'studio',label:'Studio · 375 sqft',distance:3.0,rent:'$918–$942 total',min:1068,max:1222,sources:['Apartments','ForRent','HotPads','Redfin'],status:'ok',note:'刊登為 total price；另加用量型費用。'},
-      {name:'Onnix Apartments',address:'1500 E Broadway Rd, Tempe, AZ 85282',type:'studio',label:'Studio · 443 sqft',distance:1.4,rent:'$951 total',min:1101,max:1231,sources:['Realtor','Rent','Redfin'],status:'ok',note:'價格跨站一致；確認網路與 parking。'},
-      {name:'Studio 710',address:'710 S Hardy Dr, Tempe, AZ 85281',type:'studio',label:'Studio · 350 sqft',distance:1.1,rent:'$949',min:1129,max:1299,sources:['Apartments','Realtor','Rent','HotPads','Trulia','Redfin'],status:'ok',note:'跨站資料完整；確認 specials 與 fees。'},
-      {name:'The Place of Tempe',address:'607–627 W 19th St, Tempe, AZ 85281',type:'studio',label:'Studio',distance:1.1,rent:'$950',min:1130,max:1300,sources:['Apartments','ForRent'],status:'verify',note:'確認 AC、water/trash 與 laundry。'},
-      {name:'Emerson Park',address:'1701 E Don Carlos Ave, Tempe, AZ 85281',type:'studio',label:'Studio · 410 sqft',distance:1.4,rent:'$970',min:1150,max:1320,sources:['Apartments','ForRent','Rent','HotPads','Trulia','Redfin'],status:'verify',note:'Facebook 對方身分與分租權須向 office 核對。'},
-      {name:'Westmount Downtown Tempe',address:'615 S Hardy Dr, Tempe, AZ 85281',type:'studio',label:'1BR · 600 sqft',distance:1.1,rent:'$994 total',min:1144,max:1274,sources:['Realtor','ForRent','Rent','HotPads','Redfin'],status:'ok',note:'2 months free；確認優惠後續租金。'},
-      {name:'312 S Wilson St（兩人分攤）',address:'312 S Wilson St, Tempe, AZ 85281',type:'room',label:'Private room · 2BR/1BA',distance:1.1,rent:'$700–$750 / 人',min:815,max:960,sources:[],status:'verify',note:'私人來源；必須有人共同簽約。'},
-      {name:'1115 E Lemon St',address:'1115 E Lemon St, Tempe, AZ 85281',type:'room',label:'Private room',distance:.8,rent:'$800 utilities included',min:815,max:840,sources:[],status:'risk',note:'看房前要求 $100；未經官方驗證不要付款。'}
+    const sites={Apartments:'https://www.apartments.com/off-campus-housing/az/tempe/arizona-state-university-tempe-campus/under-1000/',Realtor:'https://www.realtor.com/apartments/Tempe_AZ/price-na-1000',ForRent:'https://www.forrent.com/find/az/tempe/apartment/less-than-1000',Rent:'https://www.rent.com/arizona/tempe-apartments/max-price-1000',HotPads:'https://hotpads.com/tempe-az/apartments-under-1000',Trulia:'https://www.trulia.com/for_rent/Tempe%2CAZ/apartments-under-1000/',Redfin:'https://www.redfin.com/city/18607/AZ/Tempe/rentals-under-1000'};
+    const facebook=[
+      {n:'1701 E Don Carlos Ave 私人房源',a:'1701 E Don Carlos Ave, Tempe, AZ 85281',t:'Private room／待確認',d:'1.4 mi',r:'月租未提供',total:'無法估算',links:[['Facebook','https://www.facebook.com/share/p/1AJpnuzuDK/']],s:'risk',note:'此地址是 Emerson Park；須確認 unit number、月租與合法分租權。'},
+      {n:'Facebook housing post',a:'地址未取得',t:'待確認',d:'—',r:'未提供',total:'無法估算',links:[['Facebook','https://www.facebook.com/share/p/18pcjfb5Z7/']],s:'verify',note:'需補地址、房型、租金、utilities、押金與 lease。'},
+      {n:'Facebook furnished private room',a:'近 ASU，地址未公開',t:'Furnished private room',d:'—',r:'$700 + utilities 約 $100',total:'約 $800–$850',links:[['Facebook','https://www.facebook.com/share/p/19BLVfWBvF/']],s:'verify',note:'確認 exact address、浴室、押金、室友與房東身分。'},
+      {n:'1025 S Siesta Ln',a:'1025 S Siesta Ln, Tempe, AZ 85281',t:'Private room · 5BR/5BA house',d:'約 1.8 mi',r:'約 $850',total:'$965–$1,060',links:[['HotPads','https://hotpads.com/1025-s-siesta-ln-tempe-az-85281-1n09rzn/pad-for-sublet'],['Trulia','https://www.trulia.com/home/1025-s-siesta-ln-tempe-az-85281-7586573']],s:'verify',note:'房東未持續回覆；確認浴室、utilities、押金與室友。'},
+      {n:'1115 E Lemon St',a:'1115 E Lemon St, Tempe, AZ 85281',t:'Private room',d:'0.8 mi',r:'$800，對方稱 utilities included',total:'$815–$840',links:[['Facebook／官方驗證','https://www.universityvalley.com/']],s:'risk',note:'要求看房前付 $100；官方驗證前不要付款。'},
+      {n:'312 S Wilson St（兩人分攤）',a:'312 S Wilson St, Tempe, AZ 85281',t:'Private room · 2BR/1BA',d:'約 1.1 mi',r:'$700–$750／人',total:'$815–$960／人',links:[['Zillow 地址資料','https://www.zillow.com/homedetails/312-S-Wilson-St-Tempe-AZ-85281/65438162_zpid/']],s:'verify',note:'私人提供、非 Facebook；需有人共同簽約並確認連帶責任。'}
     ];
-    const typeFilter=document.querySelector('#type-filter'), priceFilter=document.querySelector('#price-filter'), distanceFilter=document.querySelector('#distance-filter');
-    const body=document.querySelector('#listing-body'), list=document.querySelector('#location-list'), frame=document.querySelector('#map-frame'), mapLink=document.querySelector('#open-map');
-    let selected='Gateway at Tempe';
-    const esc=s=>s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-    const mapUrl=address=>'https://www.google.com/maps?q='+encodeURIComponent(address)+'&output=embed';
-    const mapOpen=address=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);
-    function filtered(){return listings.filter(x=>(typeFilter.value==='all'||x.type===typeFilter.value)&&x.min<=+priceFilter.value&&x.distance<=+distanceFilter.value).sort((a,b)=>a.min-b.min);}
-    function choose(name){selected=name; const item=listings.find(x=>x.name===name); frame.src=mapUrl(item.address); mapLink.href=mapOpen(item.address); render();}
-    function render(){const rows=filtered(); if(!rows.some(x=>x.name===selected)&&rows[0]) selected=rows[0].name; const active=listings.find(x=>x.name===selected); if(active){frame.src=mapUrl(active.address);mapLink.href=mapOpen(active.address)}
-      document.querySelector('#count').textContent=`顯示 ${rows.length} / ${listings.length} 間`;
-      document.querySelector('#best-price').textContent=rows.length?`$${Math.min(...rows.map(x=>x.min)).toLocaleString()}`:'—';
-      document.querySelector('#near-count').textContent=rows.filter(x=>x.distance<=1).length;
-      document.querySelector('#empty').hidden=rows.length>0;
-      body.innerHTML=rows.map((x,i)=>`<tr class="${x.name===selected?'selected':''}" data-name="${esc(x.name)}"><td><span class="property">${i+1}. ${esc(x.name)}</span><span class="address">${esc(x.address)}</span></td><td>${esc(x.label)}</td><td>${x.distance.toFixed(1)} mi</td><td>${esc(x.rent)}</td><td><span class="total">$${x.min.toLocaleString()}–$${x.max.toLocaleString()}</span></td><td><span class="source-links">${x.sources.length?x.sources.map(s=>`<a href="${sourceUrls[s]}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${s}</a>`).join(''):'私人來源'}</span></td><td><span class="status ${x.status}">${x.status==='ok'?'資料較完整':x.status==='risk'?'高風險':'待確認'}</span><span class="address">${esc(x.note)}</span></td></tr>`).join('');
-      list.innerHTML=rows.map((x,i)=>`<button class="location-item ${x.name===selected?'active':''}" data-name="${esc(x.name)}"><span class="pin">${i+1}</span><span><span class="loc-name">${esc(x.name)}</span><span class="loc-address">${esc(x.address)}</span></span><span class="loc-distance">${x.distance.toFixed(1)} mi</span></button>`).join('');
-      document.querySelectorAll('[data-name]').forEach(el=>el.addEventListener('click',()=>choose(el.dataset.name)));
-    }
-    [typeFilter,priceFilter,distanceFilter].forEach(el=>el.addEventListener('change',render)); render();
+    const platforms=[
+      {n:'Gateway at Tempe',a:'1655 E University Dr, Tempe, AZ 85281',t:'4BR student housing',d:'1.3 mi',r:'$745+／人',total:'$805–$905',p:['Realtor','Rent','Redfin'],s:'ok',note:'確認 individual lease、utility cap 與優惠後租金。'},
+      {n:'1037 S Farmer Ave',a:'1037 S Farmer Ave, Tempe, AZ 85281',t:'1BR · 350 sqft',d:'0.6 mi',r:'$695',total:'$875–$1,045',p:['Redfin'],s:'verify',note:'價格明顯偏低，須確認仍可租及是否為整戶。'},
+      {n:'Lofts on 8th',a:'1403 E 8th St, Tempe, AZ 85281',t:'4BR student housing',d:'1.1 mi',r:'$899+／人',total:'$959–$1,059',p:['Apartments'],s:'verify',note:'確認家具、網路、utilities 與 parking。'},
+      {n:'The District on Apache',a:'977 E Apache Blvd, Tempe, AZ 85281',t:'4BR student housing',d:'0.7 mi',r:'$899+／人',total:'$959–$1,059',p:['Apartments'],s:'verify',note:'近 light rail；確認 utility allowance。'},
+      {n:'The Molino Apartments',a:'1651 W Baseline Rd, Tempe, AZ 85283',t:'Studio · 315+ sqft',d:'約 4.0 mi',r:'$949',total:'$999–$1,099',p:['Rent','Redfin'],s:'ok',note:'網路與 flat-rate utilities；通勤較遠。'},
+      {n:'VERVE Tempe',a:'1011 E Orange St, Tempe, AZ 85281',t:'4BR student housing',d:'0.7 mi',r:'$999 total price',total:'$1,059–$1,129',p:['Apartments'],s:'ok',note:'12-month lease；另確認用量型費用。'},
+      {n:'Canvas',a:'1010 E Orange St, Tempe, AZ 85281',t:'4BR student housing',d:'0.6 mi',r:'$999／人',total:'$1,059–$1,159',p:['Apartments','ForRent'],s:'verify',note:'確認 utilities cap、家具與 parking。'},
+      {n:'University Pointe',a:'919 E Lemon St, Tempe, AZ 85281',t:'Studio',d:'0.5 mi',r:'$899+',total:'$1,079–$1,249',p:['Apartments'],s:'verify',note:'廣告有 1 month free；確認優惠後租金。'},
+      {n:'Sentry Tempe',a:'3730 S Mill Ave, Tempe, AZ 85282',t:'Studio · 375 sqft',d:'約 3.0 mi',r:'$918–$942 total',total:'$1,068–$1,222',p:['Apartments','ForRent','HotPads','Redfin'],s:'ok',note:'另加電、水、網路等用量型費用。'},
+      {n:'Onnix Apartments',a:'1500 E Broadway Rd, Tempe, AZ 85282',t:'Studio · 443 sqft',d:'1.4 mi',r:'$951 total',total:'$1,101–$1,231',p:['Realtor','Rent','Redfin'],s:'ok',note:'跨站價格一致；確認網路與 parking。'},
+      {n:'Studio 710',a:'710 S Hardy Dr, Tempe, AZ 85281',t:'Studio · 350 sqft',d:'1.1 mi',r:'$949',total:'$1,129–$1,299',p:['Apartments','Realtor','Rent','HotPads','Trulia','Redfin'],s:'ok',note:'資料完整；確認 specials 與 required fees。'},
+      {n:'The Place of Tempe',a:'607–627 W 19th St, Tempe, AZ 85281',t:'Studio',d:'1.1 mi',r:'$950',total:'$1,130–$1,300',p:['Apartments','ForRent'],s:'verify',note:'確認 AC、water/trash、laundry 與 fees。'},
+      {n:'Emerson Park',a:'1701 E Don Carlos Ave, Tempe, AZ 85281',t:'Studio · 410 sqft',d:'1.4 mi',r:'$970',total:'$1,150–$1,320',p:['Apartments','ForRent','Rent','HotPads','Trulia','Redfin'],s:'verify',note:'與 Facebook 地址相同；向官方 office 核對。'},
+      {n:'Westmount Downtown Tempe',a:'615 S Hardy Dr, Tempe, AZ 85281',t:'1BR · 600 sqft',d:'1.1 mi',r:'$994 total',total:'$1,144–$1,274',p:['Realtor','ForRent','Rent','HotPads','Redfin'],s:'ok',note:'2 months free；確認優惠結束後租金。'}
+    ];
+    const esc=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    const map=a=>a.includes('地址未')||a.includes('地址未公開')?'':`<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a)}" target="_blank" rel="noopener">Google Maps ↗</a>`;
+    const row=x=>`<tr><td><span class="name">${esc(x.n)}</span><span class="address">${esc(x.a)}</span>${map(x.a)}</td><td>${esc(x.t)}</td><td>${esc(x.d)}</td><td>${esc(x.r)}</td><td><span class="total">${esc(x.total)}</span></td><td><span class="source-links">${(x.links||x.p.map(s=>[s,sites[s]])).map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(n)}</a>`).join('')}</span></td><td><span class="status ${x.s}">${x.s==='ok'?'資料較完整':x.s==='risk'?'高風險':'待確認'}</span><span class="detail">${esc(x.note)}</span></td></tr>`;
+    document.querySelector('#facebook-body').innerHTML=facebook.map(row).join(''); document.querySelector('#platform-body').innerHTML=platforms.map(row).join('');
   </script>
 </body>
 </html>
