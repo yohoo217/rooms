@@ -27,7 +27,7 @@
     </section>
 
     <section class="section" id="platforms">
-      <div class="section-head"><div><h2>2. 其他平台：5 筆 $600–800 候選</h2><p class="section-note">2026/7/2 重新查核；每個按鈕均連到該房源的獨立刊登頁，不再使用平台搜尋結果頁。價格與 availability 仍可能隨時變動。</p></div><select class="sort-select" id="platform-sort" aria-label="其他平台房源排序"><option value="cost-asc">總月費：低到高</option><option value="cost-desc">總月費：高到低</option><option value="rent-asc">刊登租金：低到高</option><option value="distance-asc">距離：近到遠</option><option value="original">原始順序</option></select></div>
+      <div class="section-head"><div><h2>2. 其他平台：4 筆 $600–800 候選</h2><p class="section-note">2026/7/2 重新查核；每個按鈕均連到該房源的獨立刊登頁，不再使用平台搜尋結果頁。價格與 availability 仍可能隨時變動。</p></div><select class="sort-select" id="platform-sort" aria-label="其他平台房源排序"><option value="cost-asc">總月費：低到高</option><option value="cost-desc">總月費：高到低</option><option value="rent-asc">刊登租金：低到高</option><option value="distance-asc">距離：近到遠</option><option value="original">原始順序</option></select></div>
       <div class="table-wrap"><table class="data-table"><thead><tr><th>房源／地址</th><th>房型</th><th>距 ASU</th><th>刊登租金</th><th>預估總月費</th><th>來源連結</th><th>條件／風險</th></tr></thead><tbody id="platform-body"></tbody></table></div>
     </section>
 
@@ -45,7 +45,6 @@
     const platforms=[
       {n:'820 W 9th St student room',a:'820 W 9th St, Tempe, AZ 85281',t:'Private room · 6BR/4BA',d:'約 1.3 mi',r:'$699／房',total:'約 $814–$909',links:[['Apartments.com','https://www.apartments.com/820-w-9th-st-tempe-az/6pe2nnt/'],['Redfin','https://www.redfin.com/AZ/Tempe/820-W-9th-St-85281/home/27656177']],s:'verify',note:'獨立刊登頁顯示 2026/8/2 可入住、押金 $699；租期與 utilities 須再確認。'},
       {n:'3300 S Terrace Rd Room 6',a:'3300 S Terrace Rd, Tempe, AZ 85282',t:'Private room · 6BR/3BA',d:'約 2.7 mi',r:'$700／房',total:'約 $760–$870',links:[['Zillow','https://www.zillow.com/b/3300-south-terrace-road-tempe-az-9Tf3KL/'],['RentCafe','https://www.rentcafe.com/housing/az/tempe/3300-s-terrace-rd-unit-room-6-master/default.aspx'],['Redfin','https://www.redfin.com/AZ/Tempe/3300-S-Terrace-Rd-85282/unit-6/apartment/180741081']],s:'verify',note:'刊登頁標示 utilities 每人通常 $60–$170、押金 $700、最短 6 個月；少於 12 個月每月另加 $50。'},
-      {n:'Gateway at Tempe',a:'1655 E University Dr, Tempe, AZ 85288',t:'Student housing · 3–4BR',d:'約 1.3 mi',r:'$725+／人',total:'約 $790–$900+',links:[['Apartments.com','https://www.apartments.com/gateway-at-tempe-tempe-az/9jhkkk6/'],['ForRent.com','https://www.forrent.com/az/tempe/gateway-at-tempe/wjhknkk'],['Redfin','https://www.redfin.com/AZ/Tempe/Gateway-at-Tempe/apartment/28246535']],s:'verify',note:'CoStar verified 刊登；$725 為最低總月價起點，water/sewer、electric、保險與停車可能另計，須確認實際可租房型。'},
       {n:'850 S River Dr Room 2',a:'850 S River Dr, Tempe, AZ 85281',t:'Private room · 3BR/3BA',d:'約 1.7 mi',r:'$800／房',total:'約 $860–$970',links:[['Highrises.com','https://www.highrises.com/rentals/details/850-S-River-Dr-2_Tempe_AZ_85281_M94594-96460'],['Redfin','https://www.redfin.com/AZ/Tempe/850-S-River-Dr-85281/unit-2/home/200471972']],s:'verify',note:'刊登頁標示 available now、押金 $800；utilities 每人通常 $60–$170、最短 6 個月，少於 12 個月每月另加 $50。'},
       {n:'1015 S Stanley Pl Unit 26',a:'1015 S Stanley Pl Unit 26, Tempe, AZ 85281',t:'2BR/1BA · 須確認是否按房出租',d:'約 1.1 mi',r:'$700',total:'約 $815–$910（暫估）',links:[['Redfin','https://www.redfin.com/AZ/Tempe/1015-S-Stanley-Pl-85281/unit-26/home/202315298']],s:'verify',note:'平台列為 2026/8/1 可入住；$700 是否為整戶或每房、utilities、押金與租期都必須先確認。'}
     ];
@@ -55,7 +54,6 @@
       '3941 S Mill Ave private room':'直達校園公車在屋旁；免費 Orbit 步行數分鐘；騎車約 10–15 分鐘',
       '820 W 9th St student room':'刊登稱步行約 5 分鐘到 ASU；未確認專屬 shuttle',
       '3300 S Terrace Rd Room 6':'未確認專屬 shuttle；附近 public transit 路線須查班次',
-      'Gateway at Tempe':'未確認專屬 shuttle；University Dr 有公車，班次須確認',
       '850 S River Dr Room 2':'刊登標示附近有 public transit；未確認專屬 shuttle',
       '1015 S Stanley Pl Unit 26':'未確認專屬 shuttle；可查附近 Orbit／Valley Metro',
       'Lofts on 8th':'有：免費 Orbit Bus 路線',
