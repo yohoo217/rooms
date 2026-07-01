@@ -184,7 +184,7 @@
         'Is there a shuttle or nearby public transit to the ASU Tempe campus?'
       ]
     };
-    const questionsFor=x=>questions[x.n]||(x.s==='verify'?[
+    const questionsFor=x=>x.msg?null:(questions[x.n]||(x.s==='verify'?[
       `Is the ${x.t} at ${x.a} still available at the advertised rent of ${x.r}?`,
       'Which utilities and mandatory monthly fees are not included in the advertised rent?',
       'How much is the security deposit?',
@@ -192,7 +192,7 @@
       'What notice is required to move out, and how much notice is given before a rent increase?',
       'Is an eighteen-month or two-year lease available?',
       'Is there a shuttle or nearby public transit to the ASU Tempe campus?'
-    ]:null);
+    ]:null));
     const shuttle=x=>shuttleInfo[x.n]||'Shuttle／校車：需向房源確認';
     const row=x=>{const qs=questionsFor(x);return `<tr><td><span class="name">${esc(x.n)}</span><span class="address">${esc(x.a)}</span>${map(x.a)}</td><td>${esc(x.t)}</td><td>${esc(x.d)}<span class="shuttle">${esc(shuttle(x))}</span></td><td>${esc(x.r)}</td><td><span class="total">${esc(x.total)}</span></td><td><span class="source-links">${(x.links||x.p.map(s=>[s,sites[s]])).map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(n)}</a>`).join('')}</span></td><td>${x.msg?'<span class="message-confirmed" title="曾透過訊息向對方確認資訊；不代表身分或房源已驗證">✓ 已訊息確認</span>':''}<span class="status ${x.s}">${x.s==='ok'?'資料較完整':x.s==='risk'?'高風險':'待確認'}</span><span class="detail">${esc(x.note)}</span>${qs?`<div class="ask-text"><strong>Ask in English:</strong><ol>${qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ol></div>`:''}</td></tr>`};
     const numberFrom=value=>{const match=String(value).replace(/,/g,'').match(/[\d.]+/);return match?Number(match[0]):Infinity};
