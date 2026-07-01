@@ -3,856 +3,151 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tempe 找房整理</title>
+  <title>Tempe 找房地圖</title>
   <style>
-    :root {
-      --bg: #f7f8f5;
-      --paper: #ffffff;
-      --ink: #20251f;
-      --muted: #667064;
-      --line: #d9ded4;
-      --green: #315d43;
-      --green-soft: #e5efe8;
-      --blue: #2f5975;
-      --blue-soft: #e6eef4;
-      --amber: #7a5625;
-      --amber-soft: #f3eadb;
-      --red: #8a3a33;
-      --red-soft: #f3e4e2;
-      --shadow: 0 14px 36px rgba(32, 37, 31, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      line-height: 1.55;
-    }
-
-    a {
-      color: var(--blue);
-      text-decoration-thickness: 1px;
-      text-underline-offset: 3px;
-    }
-
-    .page {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 32px 20px 56px;
-    }
-
-    header {
-      display: grid;
-      grid-template-columns: 1.4fr 0.8fr;
-      gap: 24px;
-      align-items: end;
-      padding: 28px 0 24px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 4vw, 3.6rem);
-      line-height: 1.05;
-      letter-spacing: 0;
-    }
-
-    h2 {
-      margin: 0 0 16px;
-      font-size: 1.45rem;
-      line-height: 1.2;
-    }
-
-    h3 {
-      margin: 0 0 8px;
-      font-size: 1.06rem;
-    }
-
-    p {
-      margin: 0 0 12px;
-    }
-
-    .lede {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
-
-    .status-panel {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .status-panel strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      margin: 24px 0;
-    }
-
-    .card {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .card .price {
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: var(--green);
-      margin: 10px 0 2px;
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 12px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      min-height: 26px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: var(--green-soft);
-      color: var(--green);
-      font-size: 0.82rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .tag.blue {
-      background: var(--blue-soft);
-      color: var(--blue);
-    }
-
-    .tag.amber {
-      background: var(--amber-soft);
-      color: var(--amber);
-    }
-
-    .tag.red {
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    section {
-      margin-top: 30px;
-    }
-
-    .section-band {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--paper);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 980px;
-    }
-
-    th,
-    td {
-      padding: 13px 12px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-      text-align: left;
-    }
-
-    th {
-      background: #eef2eb;
-      color: #334036;
-      font-size: 0.86rem;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .rank {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--green);
-      color: white;
-      font-weight: 700;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    ul {
-      margin: 8px 0 0;
-      padding-left: 20px;
-    }
-
-    li {
-      margin: 5px 0;
-    }
-
-    .post-box {
-      background: #fbfcfa;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 18px;
-      white-space: pre-wrap;
-      font-family: "Courier New", monospace;
-      font-size: 0.95rem;
-      overflow-x: auto;
-    }
-
-    .source-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .source-list a {
-      display: inline-flex;
-      padding: 6px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--paper);
-      font-size: 0.9rem;
-    }
-
-    .note {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .decision {
-      border-left: 4px solid var(--green);
-      padding-left: 14px;
-    }
-
-    @media (max-width: 900px) {
-      header,
-      .two-col {
-        grid-template-columns: 1fr;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 560px) {
-      .page {
-        padding: 22px 14px 42px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section-band,
-      .card,
-      .status-panel {
-        padding: 14px;
-      }
-    }
+    :root { --ink:#17211b; --muted:#66736b; --line:#d9e0dc; --soft:#f5f8f6; --green:#177744; --green-soft:#eaf5ed; --amber:#a76412; --amber-soft:#fff4df; --red:#b63b24; --red-soft:#fff0ec; --shadow:0 18px 50px rgba(23,33,27,.08); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:#fff; font:15px/1.5 Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; }
+    button, select { font:inherit; }
+    a { color:var(--green); text-underline-offset:3px; }
+    .shell { min-height:100vh; padding:28px; }
+    header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; max-width:1600px; margin:0 auto 22px; }
+    h1 { margin:0; font-size:clamp(2rem,4vw,3.25rem); line-height:1; letter-spacing:-.045em; }
+    .sub { margin:10px 0 0; color:var(--muted); font-size:1.05rem; }
+    .header-link { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--green); border-radius:8px; color:var(--green); text-decoration:none; white-space:nowrap; font-weight:700; }
+    .filters { display:flex; flex-wrap:wrap; gap:10px; max-width:1600px; margin:0 auto 18px; }
+    .filter { min-width:170px; padding:11px 36px 11px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); }
+    .count { display:flex; align-items:center; margin-left:auto; color:var(--muted); }
+    .layout { display:grid; grid-template-columns:minmax(360px,42%) minmax(680px,58%); gap:16px; max-width:1600px; margin:auto; align-items:start; }
+    .map-panel { position:sticky; top:16px; height:calc(100vh - 32px); min-height:720px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--soft); box-shadow:var(--shadow); }
+    .map-frame { width:100%; height:52%; border:0; display:block; background:#e8eeea; }
+    .map-head { position:absolute; top:14px; left:14px; right:14px; display:flex; justify-content:space-between; gap:10px; pointer-events:none; }
+    .map-label { padding:8px 10px; background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:7px; box-shadow:0 6px 20px rgba(0,0,0,.08); font-size:.82rem; font-weight:800; }
+    .location-list { height:48%; overflow:auto; padding:12px; background:#fff; border-top:1px solid var(--line); }
+    .location-item { width:100%; display:grid; grid-template-columns:32px 1fr auto; gap:10px; align-items:center; padding:11px 10px; border:0; border-bottom:1px solid #edf0ee; background:transparent; text-align:left; color:var(--ink); cursor:pointer; }
+    .location-item:hover, .location-item.active { background:var(--green-soft); }
+    .pin { width:30px; height:30px; display:grid; place-items:center; border-radius:50%; background:#fff; border:1.5px solid var(--green); color:var(--green); font-weight:800; }
+    .active .pin { color:#fff; background:var(--green); }
+    .loc-name { display:block; font-weight:800; }
+    .loc-address { display:block; color:var(--muted); font-size:.78rem; }
+    .loc-distance { color:var(--muted); font-size:.8rem; white-space:nowrap; }
+    .content { min-width:0; }
+    .summary { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+    .summary div { padding:13px 14px; border:1px solid var(--line); border-radius:9px; }
+    .summary strong { display:block; font-size:1.25rem; color:var(--green); }
+    .summary span { color:var(--muted); font-size:.8rem; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:#fff; box-shadow:var(--shadow); }
+    table { width:100%; min-width:1050px; border-collapse:collapse; }
+    th, td { padding:12px 11px; border-bottom:1px solid var(--line); vertical-align:top; text-align:left; }
+    th { position:sticky; top:0; z-index:2; background:#f4f7f5; color:#425047; font-size:.75rem; letter-spacing:.025em; text-transform:uppercase; }
+    tbody tr { cursor:pointer; transition:background .15s ease; }
+    tbody tr:hover, tbody tr.selected { background:#f0f8f2; }
+    tbody tr.selected td:first-child { box-shadow:inset 4px 0 var(--green); }
+    .property { font-weight:800; }
+    .address { display:block; margin-top:3px; color:var(--muted); font-size:.78rem; }
+    .total { color:var(--green); font-weight:850; white-space:nowrap; }
+    .source-links { display:flex; flex-wrap:wrap; gap:5px 8px; max-width:160px; }
+    .source-links a { font-size:.76rem; }
+    .status { display:inline-flex; align-items:center; gap:6px; font-size:.76rem; white-space:nowrap; }
+    .status::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--green); }
+    .status.verify::before { background:var(--amber); }
+    .status.risk::before { background:var(--red); }
+    .empty { padding:36px; text-align:center; color:var(--muted); }
+    .notes { margin-top:14px; padding:17px 18px; border:1px solid var(--line); border-radius:10px; background:var(--soft); }
+    .notes h2 { margin:0 0 8px; font-size:1rem; }
+    .notes p { margin:5px 0; color:var(--muted); font-size:.86rem; }
+    .legend { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:10px; color:var(--muted); font-size:.78rem; }
+    @media (max-width:1100px) { .shell{padding:18px}.layout{grid-template-columns:1fr}.map-panel{position:relative;top:0;height:670px;min-height:0}.content{min-width:0}.count{width:100%;margin-left:0}.summary{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:620px) { .shell{padding:14px}header{align-items:flex-start;flex-direction:column}.header-link{width:100%;justify-content:center}.filters{display:grid;grid-template-columns:1fr 1fr}.filter{min-width:0;width:100%}.count{grid-column:1/-1}.map-panel{height:610px}.map-frame{height:47%}.location-list{height:53%}.summary{grid-template-columns:1fr}.summary div{display:flex;justify-content:space-between;align-items:center} }
   </style>
 </head>
 <body>
-  <main class="page">
+  <main class="shell">
     <header>
-      <div>
-        <h1>Tempe 找房整理</h1>
-        <p class="lede">整理目前考慮的長租、分租與短租過渡方案。重點是先排除詐騙風險，再比較總月費、通勤、室友與合約彈性。</p>
-      </div>
-      <aside class="status-panel">
-        <strong>目前建議</strong>
-        <p>先向 Gateway at Tempe、VERVE、Lofts on 8th 與 The District 索取完整月費報價；預估 all-in 約 $805-$1,129。Facebook 低價房源只走官方管道驗證，不先付款。</p>
-      </aside>
+      <div><h1>Tempe 找房地圖</h1><p class="sub">ASU Tempe 周邊房源，一張表比較地址、距離與每月總成本。</p></div>
+      <a class="header-link" id="open-map" href="https://www.google.com/maps/search/?api=1&query=ASU+Tempe+housing" target="_blank" rel="noopener">↗ 開啟 Google Maps</a>
     </header>
 
-    <section class="grid" aria-label="快速比較">
-      <article class="card">
-        <h3>312 S Wilson St</h3>
-        <p class="price">$700-$750 / 人</p>
-        <p class="note">找到室友後的估算。兩人住 $1500；兩人簽兩年約 $1400。</p>
-        <div class="tag-row">
-          <span class="tag blue">需共同簽約</span>
-          <span class="tag blue">2B1B</span>
+    <section class="filters" aria-label="房源篩選">
+      <select class="filter" id="type-filter" aria-label="房型"><option value="all">全部房型</option><option value="student">學生分租</option><option value="room">私人房間</option><option value="studio">Studio / 1BR</option></select>
+      <select class="filter" id="price-filter" aria-label="總月費"><option value="9999">全部總月費</option><option value="900">總月費 ≤ $900</option><option value="1100" selected>總月費 ≤ $1,100</option><option value="1300">總月費 ≤ $1,300</option></select>
+      <select class="filter" id="distance-filter" aria-label="距離"><option value="99">全部距離</option><option value="1">距校園 ≤ 1 mile</option><option value="2" selected>距校園 ≤ 2 miles</option><option value="3">距校園 ≤ 3 miles</option></select>
+      <span class="count" id="count"></span>
+    </section>
+
+    <div class="layout">
+      <aside class="map-panel" aria-label="Google Maps 房源位置">
+        <iframe class="map-frame" id="map-frame" title="選取房源 Google Map" loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="map-head"><span class="map-label">Google Maps · 點選下方房源切換</span></div>
+        <div class="location-list" id="location-list"></div>
+      </aside>
+
+      <section class="content">
+        <div class="summary"><div><strong id="best-price">—</strong><span>最低預估月費</span></div><div><strong id="near-count">—</strong><span>1 mile 內房源</span></div><div><strong id="platform-count">7</strong><span>已整理平台</span></div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>房源 / 地址</th><th>房型</th><th>距 ASU</th><th>刊登租金</th><th>預估總月費</th><th>來源</th><th>狀態</th></tr></thead>
+            <tbody id="listing-body"></tbody>
+          </table>
+          <div class="empty" id="empty" hidden>沒有符合目前篩選條件的房源。</div>
         </div>
-      </article>
-
-      <article class="card">
-        <h3>1025 S Siesta Ln</h3>
-        <p class="price">約 $850</p>
-        <p class="note">5B5B house 分租房。房東回覆後中斷，仍需確認房型與室友。</p>
-        <div class="tag-row">
-          <span class="tag blue">備選</span>
-          <span class="tag amber">資訊未全</span>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3>1115 E Lemon St</h3>
-        <p class="price">$800</p>
-        <p class="note">對方稱含 utilities、押金 $500，但要求先付 $100 才 tour。</p>
-        <div class="tag-row">
-          <span class="tag red">先驗證</span>
-          <span class="tag amber">申請費風險</span>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3>Airbnb Room #4</h3>
-        <p class="price">依日期</p>
-        <p class="note">Superhost，適合先到 Tempe 再實地找房。</p>
-        <div class="tag-row">
-          <span class="tag blue">短租過渡</span>
-          <span class="tag">平台付款</span>
-        </div>
-      </article>
-    </section>
-
-    <section>
-      <h2>Zillow 精選 3 間房</h2>
-      <p class="note">更新日期：2026-06-25。這三個是直接從 Zillow 目前可見的 Tempe room-for-rent 房源挑出來的，優先考量 ASU 便利性、價格、是否適合學生、資訊完整度與付款風險。</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>排序</th>
-              <th>房源</th>
-              <th>價格 / 房型</th>
-              <th>為什麼適合</th>
-              <th>主要風險</th>
-              <th>建議先問</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="rank">1</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/1116-W-17th-Pl-Tempe-AZ-85281/7559225_zpid/">1116 W 17th Pl</a></strong><br>Holdeman / Broadway & Priest 附近</td>
-              <td>$850/mo<br>4 bed / 2 bath house<br>1 room、3 housemates</td>
-              <td>距 ASU 車程約 5 分鐘，Orbit shuttle 進社區，房間是 detached casita，可能有 private entrance。共用區域 furnished，in-unit laundry，可 6 或 12 個月 lease。</td>
-              <td>Utilities 不含，按總帳單 1/4 分攤；目前 3 位男性室友、1 隻貓；不是 private bath；收入需 3x rent 或 co-signer。</td>
-              <td>問 casita 是否真的獨立入口、衛浴要和誰共用、過去夏天 utilities 每人平均多少、是否接受國際學生 co-signer。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">2</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/1212-W-10th-St-3-Tempe-AZ-85281/450048269_zpid/">1212 W 10th St #3</a></strong><br>靠 ASU / Orbit Venus shuttle</td>
-              <td>$850/mo + utilities<br>Room in furnished house<br>Available Aug 1</td>
-              <td>房源描述寫現有住戶是 young professionals 和 ASU graduate students，氣氛安靜、尊重隱私。房子 furnished、廚房設備完整、Wi-Fi、洗烘、停車都有，適合剛到美國少帶家具的人。</td>
-              <td>Zillow 欄位寫 no private bath / not furnished，但描述又寫 master bedroom with private bathroom、房間與房子 furnished，資訊互相矛盾。</td>
-              <td>直接請對方確認：這間到底是不是 master bedroom、是否 private bathroom、是否 furnished、utilities 每月大約多少。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">3</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/1849-E-Manhatton-Dr-ROOM-4-Tempe-AZ-85282/462113763_zpid/">1849 E Manhatton Dr Room 4</a></strong><br>McClintock Manor</td>
-              <td>$750/mo<br>140 sqft private room<br>Short-term lease option</td>
-              <td>租金較低，Zillow 描述寫 all utilities + internet included，還有 bi-weekly common-area cleaning、free parking、digital door lock。適合當短期過渡或先落地找長租的備案。</td>
-              <td>房間 140 sqft 偏小；不是 private bath；離 ASU 主校區比前兩個遠；furnished 可能要額外 $75-$100/mo，需要確認。</td>
-              <td>問總月費是否真的包含水電網、最短 lease 長度、是否可以先住 1-3 個月、家具是否加價。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>6/27 新連結整理</h2>
-      <p class="note">你這次提供了 3 個連結，核對後是 3 個不同項目。以下依 2026-06-27 的公開資訊整理。</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>狀態</th>
-              <th>房源</th>
-              <th>價格 / 房型</th>
-              <th>已確認資訊</th>
-              <th>判斷</th>
-              <th>下一步</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="tag red">已下架</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/810-W-2nd-St-C-Tempe-AZ-85281/2120013618_zpid/">810 W 2nd St #C</a></strong><br>Riverside / 近 ASU</td>
-              <td>原刊登 $995/mo<br>1 bed / 1 bath<br>480 sqft</td>
-              <td>Zillow 現在顯示 Off market，最後刊登更新為 2024-12-10。舊資料寫押金 $995、申請費 $60、admin fee $200，另有至少 $25.99/月 resident benefits package。</td>
-              <td>不要把它當作目前可租房源。Zillow 同棟的 APT D 顯示約 $950、1B1B、480 sqft，可能是房東真正想分享的單位。</td>
-              <td>先問分享者是不是貼錯房號，以及目前可租的是不是 APT D；取得新的有效 Zillow listing 後再申請。</td>
-            </tr>
-            <tr>
-              <td><span class="tag amber">待確認</span></td>
-              <td><strong><a href="https://www.facebook.com/share/p/19BLVfWBvF/?mibextid=wwXIfr">Facebook private room</a></strong><br>近 ASU，完整地址未公開</td>
-              <td>$700/mo<br>+ utilities 約 $100/mo<br>Fully furnished private room</td>
-              <td>公開預覽可確認 private fridge、covered parking、in-unit laundry、move-in ready，並標示 student-friendly / ASU engineering students。照片顯示床、書桌、衣櫃與 ceiling fan。</td>
-              <td>總月費約 $800，價格有吸引力；但地址、浴室、押金、租期、室友人數與房東身分都還沒確認。</td>
-              <td>先索取 exact address、房間與共用區視訊、lease 範本、押金、浴室安排、室友資料。確認前不要匯款。</td>
-            </tr>
-            <tr>
-              <td><span class="tag">目前可租</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/the-santa-monica/BLwqd4/">The Santa Monica - Unit 124D</a></strong><br>120-128 S Carney Ave</td>
-              <td>$999/mo base rent<br>1 bed / 1 bath<br>600 sqft</td>
-              <td>Zillow 建築頁目前列 Unit 124D available now。Covered parking、shared laundry、pool、refrigerator；Walk 62、Transit 60、Bike 96。</td>
-              <td>是一個人住的完整 1B1B，隱私高且位置適合 ASU；缺點是已到預算上限，而且 Zillow 明確提醒 required fees may apply。</td>
-              <td>要求 leasing office 提供完整月費試算：base rent、tax、utilities、admin/application fee、deposit、insurance、parking 與 move-in special。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>7/1 新房源：1701 E Don Carlos Ave</h2>
-      <p class="note">以下條件依 2026-07-01 收到的 Facebook 訊息整理，並與公開租屋網站交叉核對。距離以 ASU Hayden Library 為校區中心參考點。</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>狀態</th>
-              <th>房源</th>
-              <th>租金 / 押金</th>
-              <th>離 ASU Tempe</th>
-              <th>合約條件</th>
-              <th>房東 / 室友資訊</th>
-              <th>House rules</th>
-              <th>下一步</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="tag red">需交叉驗證</span></td>
-              <td><strong><a href="https://www.facebook.com/share/p/1AJpnuzuDK/">1701 E Don Carlos Ave</a></strong><br>Emerson Park apartment community</td>
-              <td>Facebook 月租待確認<br>公開 studio 約 $970-$975<br>押金 $500（對方稱）</td>
-              <td>到 Hayden Library 約 1.6 mi<br>步行約 35 分鐘<br>騎車約 9 分鐘<br>開車約 7 分鐘</td>
-              <td>目前只提供一年租期；第一年不漲租。任一方若要終止租約，須提前 2 個月通知。</td>
-              <td>對方表示自己 35 歲，是 PhD student；仍需確認屋主身分、其他住戶人數與共用空間安排。</td>
-              <td>禁止飲酒、吸菸與養寵物；所有住戶須保持共用區域整潔。</td>
-              <td>此地址公開資料是 Emerson Park 公寓。先向 leasing office 核對對方是否有合法出租／分租權，再確認月租、utilities、房型、入住日與 lease；驗證前不要付押金。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>7/1 新連結：Facebook 房源</h2>
-      <p class="note">Facebook 公開預覽目前無法讀取這則貼文；先保留原始連結，房源內容待確認。</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>狀態</th>
-              <th>房源</th>
-              <th>價格 / 房型</th>
-              <th>已確認資訊</th>
-              <th>下一步</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="tag amber">內容待確認</span></td>
-              <td><strong><a href="https://www.facebook.com/share/p/18pcjfb5Z7/">Facebook housing post</a></strong></td>
-              <td>月租待確認<br>房型待確認<br>Utilities 待確認</td>
-              <td>目前僅保留 Facebook 原始貼文連結；地址、押金、租期與入住日尚未取得。</td>
-              <td>補查完整地址、月租與 utilities、押金、房型與衛浴、租期、室友、入住日及 lease 範本；確認身分與看房前不要付款。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>7/1 多平台候選與每月總成本</h2>
-      <p class="note">搜尋條件：Tempe、ASU Tempe 周邊、刊登租金約 $600-$1,000。總成本是保守預算，不是 leasing office 報價；不含押金、application fee、搬家與家具等一次性支出。</p>
-      <div class="section-band decision">
-        <p><strong>整戶 studio / 1BR：</strong>刊登租金 + 每月約 $180-$350（電 $90-$180、水／污水／垃圾 $50-$90、網路 $40-$60、保險／必要費用 $15-$40；部分項目可能已含）。</p>
-        <p><strong>分租 / student housing：</strong>刊登租金 + 每月約 $60-$210。學生社區常含網路與部分 utilities；私人 house 的夏季冷氣分攤通常較高。</p>
-        <p><strong>判讀方式：</strong>看到「Total monthly price」只代表已知 required monthly fees，通常仍不含依用量計費的電、水及個人 renter's insurance。</p>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>優先</th>
-              <th>房源</th>
-              <th>刊登租金 / 房型</th>
-              <th>出現平台</th>
-              <th>估計額外月費</th>
-              <th>預估每月總付</th>
-              <th>判斷 / 先確認</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="rank">1</span></td>
-              <td><strong>Gateway at Tempe</strong><br>1655 E University Dr</td>
-              <td>$745+ / 人<br>4 bed / 4 bath student housing</td>
-              <td>Zillow、Realtor、Rent.com、Redfin</td>
-              <td>$60-$130</td>
-              <td><strong>$805-$875</strong></td>
-              <td>靠 University Dr、往 ASU 方便。確認 individual lease、網路與家具是否含、utility cap、室友配對及優惠結束後租金。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">2</span></td>
-              <td><strong>3300 S Terrace Rd, Room 6</strong></td>
-              <td>$700<br>Private room / 6 bed, 3 bath house</td>
-              <td>Rent.com、Trulia、Redfin</td>
-              <td>$115-$210</td>
-              <td><strong>$815-$910</strong></td>
-              <td>價格低但離校較遠、多人共住。確認房門鎖、浴室分配、夏季電費、網路、家具、室友與 lease term。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">3</span></td>
-              <td><strong>VERVE Tempe</strong><br>1011 E Orange St</td>
-              <td>$999 total monthly price<br>4 bed student housing</td>
-              <td>Apartments.com</td>
-              <td>$60-$130</td>
-              <td><strong>$1,059-$1,129</strong></td>
-              <td>12-month lease，required monthly fees 已計入刊登價；仍需確認電、水、保險與 utility cap。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">4</span></td>
-              <td><strong>Lofts on 8th</strong><br>1403 E 8th St</td>
-              <td>$899+ / 人<br>4 bed student housing</td>
-              <td>Apartments.com</td>
-              <td>$60-$160</td>
-              <td><strong>$959-$1,059</strong></td>
-              <td>靠 ASU、in-unit laundry；確認是 per-bed 價格、家具、網路、utilities、parking 與必要月費。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">5</span></td>
-              <td><strong>The District on Apache</strong><br>977 E Apache Blvd</td>
-              <td>$899+ / 人<br>4 bed student housing</td>
-              <td>Apartments.com</td>
-              <td>$60-$160</td>
-              <td><strong>$959-$1,059</strong></td>
-              <td>離校近、light rail 方便。確認 total monthly price、家具、utilities allowance、parking 及房型實際空房。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">6</span></td>
-              <td><strong>University Pointe</strong><br>919 E Lemon St</td>
-              <td>$899+<br>Studio</td>
-              <td>Apartments.com</td>
-              <td>$180-$350</td>
-              <td><strong>$1,079-$1,249</strong></td>
-              <td>ASU 南側、通勤很好；確認一個月免費是否攤入廣告價，以及電、水、網路、停車和 mandatory package。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">7</span></td>
-              <td><strong>Sentry Tempe</strong><br>3730 S Mill Ave</td>
-              <td>$918-$942 total price<br>Studio / 1 bath</td>
-              <td>Zillow、Apartments.com、ForRent、HotPads、Redfin</td>
-              <td>$150-$280</td>
-              <td><strong>$1,068-$1,222</strong></td>
-              <td>刊登已標 total price，但位置較南。確認 variable utilities、網路、保險、停車與優惠期限。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">8</span></td>
-              <td><strong>The Place of Tempe</strong><br>607-627 W 19th St</td>
-              <td>$950<br>Studio</td>
-              <td>ForRent、Apartments.com</td>
-              <td>$180-$350</td>
-              <td><strong>$1,130-$1,300</strong></td>
-              <td>整戶價格尚可但離校較南；確認 sqft、AC 類型、water/trash、網路、laundry、parking 與 fees。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">9</span></td>
-              <td><strong>Studio 710</strong><br>710 S Hardy Dr</td>
-              <td>$949<br>Studio / 1 bath / 約 350 sqft</td>
-              <td>Zillow、Apartments.com、Rent.com、Trulia、HotPads、Redfin</td>
-              <td>$180-$350</td>
-              <td><strong>$1,129-$1,299</strong></td>
-              <td>距 ASU 合理、跨站價格一致。確認 specials、required fees、utilities、網路、parking 與 laundry。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">10</span></td>
-              <td><strong>Emerson Park</strong><br>1701 E Don Carlos Ave</td>
-              <td>$970<br>Studio / 1 bath / 約 410 sqft</td>
-              <td>Zillow、Apartments.com、ForRent、Rent.com、Trulia、HotPads、Redfin</td>
-              <td>$180-$350</td>
-              <td><strong>$1,150-$1,320</strong></td>
-              <td>到 Hayden Library 約 1.6 mi。Facebook 私人房源須先向官方 office 核對對方身分與合法分租權。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">11</span></td>
-              <td><strong>Thrive Tempe</strong><br>1137 E Orange St</td>
-              <td>$999+<br>1 bed / 1 bath / 約 820 sqft</td>
-              <td>Zillow、Apartments.com、Realtor、Rent.com、HotPads、Redfin</td>
-              <td>$180-$350</td>
-              <td><strong>$1,179-$1,349</strong></td>
-              <td>就在 ASU 東側；不同平台曾顯示 $799-$999，應以指定 unit 的書面 quote 為準。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">12</span></td>
-              <td><strong>312 S Wilson St（兩人分攤）</strong></td>
-              <td>$700-$750 / 人<br>2 bed / 1 bath</td>
-              <td>私人來源 / Zillow 地址資料</td>
-              <td>$115-$210 / 人</td>
-              <td><strong>$815-$960 / 人</strong></td>
-              <td>需有人共同簽約才成立。確認 utilities、押金、租期、replacement tenant 與雙方連帶責任。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">13</span></td>
-              <td><strong>1025 S Siesta Ln</strong></td>
-              <td>約 $850<br>Private room</td>
-              <td>Facebook、HotPads、Trulia</td>
-              <td>$115-$210</td>
-              <td><strong>$965-$1,060</strong></td>
-              <td>房東未持續回覆；確認房型、浴室、夏季 utilities、網路、押金與其他室友。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">14</span></td>
-              <td><strong>1115 E Lemon St</strong></td>
-              <td>$800，對方稱 utilities included</td>
-              <td>Facebook</td>
-              <td>$15-$40</td>
-              <td><strong>$815-$840</strong></td>
-              <td><span class="tag red">高風險</span> 要求看房前付 $100。只有官方管理方書面驗證後才考慮。</td>
-            </tr>
-            <tr>
-              <td>—</td>
-              <td><strong>Facebook：1701 E Don Carlos Ave 私人條件</strong></td>
-              <td>月租未提供</td>
-              <td>Facebook</td>
-              <td>無法計算</td>
-              <td><strong>無法估算</strong></td>
-              <td>必須先取得月租、utilities 是否包含、unit number 與合法分租證明。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="note">同一社區在不同平台重複出現，只算一個候選。若 leasing office 提供正式 itemized quote，應以 base rent + required fees + 近 12 個月平均 utilities 重算。</p>
-    </section>
-
-    <section>
-      <h2>房源比較表</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>排序</th>
-              <th>房源</th>
-              <th>價格</th>
-              <th>已知資訊</th>
-              <th>優點</th>
-              <th>風險 / 待確認</th>
-              <th>下一步</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="rank">1</span></td>
-              <td><strong>312 S Wilson St, Tempe</strong><br>玟瑞姊提供</td>
-              <td>一人住 $1400<br>兩人住 $1500<br>兩人簽兩年 $1400</td>
-              <td>2 bed / 1 bath apartment，約 856 sqft。Zillow 資訊顯示近 ASU、Mill Ave、Tempe Town Lake；有 in-unit washer/dryer、廚房設備、covered parking。</td>
-              <td>如果找到室友，每人約 $700-$750，隱私與穩定性比多人分租好。</td>
-              <td>水電網是否另計、押金、家具、合約人、提前退租、是否可轉租都還要確認。Zillow 顯示 off market，需以玟瑞姊現況為準。</td>
-              <td>先向房東取得完整 itemized monthly cost 與 lease；確認有人共同簽約後再比較。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">2</span></td>
-              <td><strong>1025 S Siesta Ln, Tempe</strong><br>Facebook / HotPads / Trulia</td>
-              <td>約 $850 / 月<br>可能另有費用</td>
-              <td>5 bed / 5 bath house 裡的 private room。房東說有幾間八月空出，一間現在可入住；有些共用衛浴，有一間較大且有自己的 kitchen / larger space。</td>
-              <td>近 ASU / Mill Ave / Tempe Town Lake / Sky Harbor，單人一房，選房型彈性較高。</td>
-              <td>房東後來沒有回覆；新室友資料不清楚；每間房價格、浴室、押金、租期與 utilities 需逐一確認。</td>
-              <td>再追問一次具體房型與價格。若 24-48 小時仍不回，暫時降優先級。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">3</span></td>
-              <td><strong>Airbnb Prime Tempe Room #4</strong><br>Steven / The 6th Street Retreat</td>
-              <td>依入住日期計算<br>需看總價含稅費</td>
-              <td>Private room in home，2 guests max，1 bedroom，1 queen bed，1 shared bath。房東為 Superhost，房源 4.75 / 32 reviews，host 4.89 / 530 reviews。</td>
-              <td>平台付款相對安全，適合先住 7-14 天，到了 Tempe 後再實地看長租。</td>
-              <td>長住可能比長租貴；共用衛浴；地址訂房後才提供；不適合當長期方案。</td>
-              <td>輸入抵達日期算總價。若長租出發前仍未定，就訂短期緩衝。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">4</span></td>
-              <td><strong>1115 E Lemon St, Tempe</strong><br>Facebook / University Valley 地址</td>
-              <td>$800 / 月含 utilities<br>押金 $500<br>申請費 $100</td>
-              <td>對方回覆地址為 1115 E Lemon St，稱 30-day written notice、租金上漲也提前 30 天通知。</td>
-              <td>地點靠 ASU，價格很低，若是真的會很有吸引力。</td>
-              <td>要求先完成 application 和 refundable $100 fee 才能 tour，是重大風險。需確認對方是否真為 University Valley 官方管理方。</td>
-              <td>不要透過 Facebook 付款。直接打 University Valley 官方電話或寄官方 email 驗證。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section>
-      <h2>Zillow 候選房源</h2>
-      <p class="note">搜尋條件依照截圖：Tempe, AZ、月租 $600-$1000、1-4 bedrooms。Zillow 顯示的價格常不含 fees，實際月費要再用 cost calculator 或直接問 leasing office。</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>優先</th>
-              <th>房源</th>
-              <th>價格 / 房型</th>
-              <th>重點資訊</th>
-              <th>優點</th>
-              <th>要確認</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="rank">1</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/803-W-1st-St-APT-A-Tempe-AZ-85281/462858040_zpid/">803 W 1st St APT A</a></strong><br>Riverside / 靠 Downtown Tempe</td>
-              <td>$1,000/mo<br>2 bed / 1 bath<br>650 sqft</td>
-              <td>Available now。Cats/dogs OK。Shared laundry。Covered + off-street parking。Owner pays water, sewer, trash；tenant pays gas, electric, internet。</td>
-              <td>如果真的是整間 2B1B 總租 $1,000，找室友後每人約 $500，性價比非常高。</td>
-              <td>確認 $1,000 是整間還是 per bedroom；照片是否為同棟 similar unit；AC 是 window unit。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">2</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/839-W-1st-St-APT-C-Tempe-AZ-85281/2101454382_zpid/">839 W 1st St APT C</a></strong><br>Riverside / 靠 ASU、light rail</td>
-              <td>$989/mo<br>1 bed / 1 bath<br>575 sqft</td>
-              <td>Available Aug 1, 2026。No pets。Reserved parking。Shared washer/dryer with one other unit。Owner pays water and trash；tenant pays gas and electric。</td>
-              <td>位置與預算都很接近需求，一個人住比多人分租穩定。</td>
-              <td>最低 credit score 650；沒有自己的 laundry；需確認 internet 與總 monthly fees。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">3</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/westmount-at-downtown-tempe-apartments/5YHQRF/">Westmount at Downtown Tempe</a></strong><br>615 S Hardy Dr</td>
-              <td>$949+<br>1 bed / 1 bath<br>600 sqft</td>
-              <td>多間 1B 可租，Unit 12 現在可入住，另有 Jul 17 / Aug 10。Pet-friendly。Shared laundry。Walk Score 77、Transit 60、Bike 100。</td>
-              <td>就是你截圖裡看到的房源；管理型 apartment，資訊比較完整，且有多個空房。</td>
-              <td>Zillow 明確寫 fees may apply；停車政策顯示 none；沒有 in-unit laundry。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">4</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/greenhouse/5XhyJM/">Greenhouse</a></strong><br>950 S Terrace Rd</td>
-              <td>$999+<br>1 bed / 1 bath<br>698 sqft</td>
-              <td>Unit 225 現在可入住。In-unit laundry。Parking lot。Central AC。1 month free on a 13 month lease。</td>
-              <td>有 in-unit laundry，比很多低價房源方便；位置靠 ASU 東側。</td>
-              <td>其他 1B 已到 $1,200；需確認 $999 單位是否仍可租、fees、13 個月約限制。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">5</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/913-e.-spence/5Z55FP/">913 E Spence Ave</a></strong><br>近 ASU 南側</td>
-              <td>$750+<br>2 bed / 1 bath<br>870 sqft</td>
-              <td>Unit 2 現在可入住；另有 3B unit $850。</td>
-              <td>價格非常低，地點對 ASU 方便。</td>
-              <td>最大疑點是 $750 是否 per room / per bed，還是整間；必須先問清楚。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">6</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/george-ann/CnfVKJ/">George Ann</a></strong><br>1122 E Lemon St</td>
-              <td>$999+<br>1 bed / 1 bath</td>
-              <td>Apartment building，pet-friendly，parking lot，window AC，shared laundry。Special offer: waived application/admin fee and possible 1 month free / gift card。</td>
-              <td>地址靠近你之前問的 1115 E Lemon St，可用來交叉確認那個 FB 房源真假。</td>
-              <td>沒有列 sqft；需確認 high speed internet 是否 included、總 fees、實際 move-in cost。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">7</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/821-W-1st-St-APT-B-Tempe-AZ-85281/2061187306_zpid/">821 W 1st St APT B</a></strong><br>Riverside / Mill Ave 附近</td>
-              <td>$999/mo<br>1 bed / 1 bath<br>600 sqft</td>
-              <td>Available now。First month free。Covered parking, onsite laundry, pool, pet-friendly green spaces。</td>
-              <td>位置不錯，有第一個月免費優惠。</td>
-              <td>Listing 更新較早；描述裡有一句「Water, For more properties...」不完整，需直接問清楚費用。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">8</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/parkside-apartments/5XhySQ/">Parkside Apartments</a></strong><br>825 S River Dr</td>
-              <td>$999+<br>1 bed / 1 bath<br>500 sqft</td>
-              <td>Unit 254 現在可入住，另有 1B $1,072。</td>
-              <td>靠 Tempe Town Lake / ASU 區域，價格踩在上限內。</td>
-              <td>500 sqft 偏小；fees may apply；需確認 laundry、parking、utilities。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">9</span></td>
-              <td><strong><a href="https://www.zillow.com/apartments/tempe-az/the-santa-monica/BLwqd4/">The Santa Monica</a></strong><br>120-128 S Carney Ave</td>
-              <td>$999+<br>1 bed / 1 bath<br>600 sqft</td>
-              <td>兩間 1B 現在可入住。Covered parking。Shared laundry。</td>
-              <td>房型簡單，價格在上限內。</td>
-              <td>資料較少，需問 utilities、AC、application fee、lease term。</td>
-            </tr>
-            <tr>
-              <td><span class="rank">10</span></td>
-              <td><strong><a href="https://www.zillow.com/homedetails/36-E-El-Parque-Dr-APT-4-Tempe-AZ-85282/2103157949_zpid/">36 E El Parque Dr APT 4</a></strong><br>Broadway & Mill</td>
-              <td>$889/mo<br>1 bed / 1 bath<br>550 sqft</td>
-              <td>Available now。Wall unit AC。Coin laundry onsite。Private backyard/community space。Price recently dropped from $1,000。</td>
-              <td>價格最低的一房之一，離 Mill Ave 不算遠。</td>
-              <td>Wall unit AC 夏天電費可能高；listing 文案品質普通，需確認 owner/manager 與 fees。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section-band">
-      <h2>建議行動順序</h2>
-      <div class="decision">
-        <p><strong>第一步：</strong>先聯絡 Gateway at Tempe、VERVE、Lofts on 8th 與 The District，要求提供 itemized total monthly price。</p>
-        <p><strong>第二步：</strong>若能接受多人共住，再核對 3300 S Terrace Rd 與 1025 S Siesta Ln 的夏季 utilities、室友與合約。</p>
-        <p><strong>第三步：</strong>1115 E Lemon St 只從 University Valley 官方網站、官方電話或官方 email 查證。確認前不要付款。</p>
-        <p><strong>第四步：</strong>如果出發前還沒定長租，就用 Airbnb 先訂 7-14 天，抵達後實地看房再簽約。</p>
-      </div>
-    </section>
-
-    <section>
-      <h2>來源連結</h2>
-      <div class="source-list">
-        <a href="https://www.zillow.com/tempe-az/apartments-under-1000/">Tempe under $1,000 / Zillow</a>
-        <a href="https://www.apartments.com/off-campus-housing/az/tempe/arizona-state-university-tempe-campus/under-1000/">ASU under $1,000 / Apartments.com</a>
-        <a href="https://www.realtor.com/apartments/Tempe_AZ/price-na-1000">Tempe under $1,000 / Realtor.com</a>
-        <a href="https://www.forrent.com/find/az/tempe/apartment/less-than-1000">Tempe under $1,000 / ForRent.com</a>
-        <a href="https://www.rent.com/arizona/tempe-apartments/max-price-1000">Tempe under $1,000 / Rent.com</a>
-        <a href="https://hotpads.com/tempe-az/apartments-under-1000">Tempe under $1,000 / HotPads</a>
-        <a href="https://www.trulia.com/for_rent/Tempe%2CAZ/">Tempe rentals / Trulia</a>
-        <a href="https://www.redfin.com/city/18607/AZ/Tempe/rentals-under-1000">Tempe under $1,000 / Redfin</a>
-        <a href="https://www.facebook.com/share/p/18pcjfb5Z7/">待確認房源 / Facebook</a>
-        <a href="https://www.facebook.com/share/p/1AJpnuzuDK/">1701 E Don Carlos Ave / Facebook</a>
-        <a href="https://www.zillow.com/homedetails/810-W-2nd-St-C-Tempe-AZ-85281/2120013618_zpid/">810 W 2nd St #C / Zillow</a>
-        <a href="https://www.facebook.com/share/p/19BLVfWBvF/?mibextid=wwXIfr">$700 private room / Facebook</a>
-        <a href="https://www.zillow.com/apartments/tempe-az/the-santa-monica/BLwqd4/">The Santa Monica Unit 124D / Zillow</a>
-        <a href="https://www.zillow.com/homedetails/312-S-Wilson-St-Tempe-AZ-85281/65438162_zpid/?view=public">312 S Wilson St / Zillow</a>
-        <a href="https://www.zillow.com/homedetails/1116-W-17th-Pl-Tempe-AZ-85281/7559225_zpid/">1116 W 17th Pl / Zillow</a>
-        <a href="https://www.zillow.com/homedetails/1212-W-10th-St-3-Tempe-AZ-85281/450048269_zpid/">1212 W 10th St #3 / Zillow</a>
-        <a href="https://www.zillow.com/homedetails/1849-E-Manhatton-Dr-ROOM-4-Tempe-AZ-85282/462113763_zpid/">1849 E Manhatton Room 4 / Zillow</a>
-        <a href="https://hotpads.com/1025-s-siesta-ln-tempe-az-85281-1n09rzn/pad-for-sublet">1025 S Siesta Ln / HotPads</a>
-        <a href="https://www.trulia.com/home/1025-s-siesta-ln-tempe-az-85281-7586573">1025 S Siesta Ln / Trulia</a>
-        <a href="https://www.universityvalley.com/">University Valley 官方網站</a>
-        <a href="https://www.airbnb.com/rooms/1532923821219280062">Airbnb Prime Tempe Room #4</a>
-      </div>
-      <p class="note">更新日期：2026-07-01。房源價格與狀態可能變動，簽約或付款前請再次確認。</p>
-    </section>
+        <section class="notes">
+          <h2>總月費怎麼算</h2>
+          <p>整戶 Studio / 1BR：租金外加約 $180–$350；學生分租：外加約 $60–$160；私人 house 房間：外加約 $115–$210。包含水、電、網路、垃圾、renter's insurance 與常見必要月費的保守區間。</p>
+          <p>距離為房源地址到 Hayden Library 的約略直線距離；實際步行、騎車與大眾運輸請點房源後在 Google Maps 查詢。優惠價、per-bed 價格與 availability 都須向 leasing office 再確認。</p>
+          <div class="legend"><span class="status">資料較完整</span><span class="status verify">價格／費用待確認</span><span class="status risk">付款或身分風險</span></div>
+        </section>
+      </section>
+    </div>
   </main>
+
+  <script>
+    const sourceUrls = {
+      Apartments:'https://www.apartments.com/off-campus-housing/az/tempe/arizona-state-university-tempe-campus/under-1000/',
+      Realtor:'https://www.realtor.com/apartments/Tempe_AZ/price-na-1000',
+      ForRent:'https://www.forrent.com/find/az/tempe/apartment/less-than-1000',
+      Rent:'https://www.rent.com/arizona/tempe-apartments/max-price-1000',
+      HotPads:'https://hotpads.com/tempe-az/apartments-under-1000',
+      Trulia:'https://www.trulia.com/for_rent/Tempe%2CAZ/apartments-under-1000/',
+      Redfin:'https://www.redfin.com/city/18607/AZ/Tempe/rentals-under-1000'
+    };
+    const listings = [
+      {name:'Gateway at Tempe',address:'1655 E University Dr, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:1.3,rent:'$745+ / 人',min:805,max:905,sources:['Realtor','Rent','Redfin'],status:'ok',note:'Individual lease；確認 utility cap。'},
+      {name:'1037 S Farmer Ave',address:'1037 S Farmer Ave, Tempe, AZ 85281',type:'studio',label:'1BR · 350 sqft',distance:.6,rent:'$695',min:875,max:1045,sources:['Redfin'],status:'verify',note:'價格明顯偏低，須確認仍可租及是否為整戶。'},
+      {name:'Lofts on 8th',address:'1403 E 8th St, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:1.1,rent:'$899+ / 人',min:959,max:1059,sources:['Apartments'],status:'verify',note:'靠 ASU；確認家具、網路與 parking。'},
+      {name:'The District on Apache',address:'977 E Apache Blvd, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:.7,rent:'$899+ / 人',min:959,max:1059,sources:['Apartments'],status:'verify',note:'近 light rail；確認 utilities allowance。'},
+      {name:'The Molino Apartments',address:'1651 W Baseline Rd, Tempe, AZ 85283',type:'studio',label:'Studio · 315+ sqft',distance:4.0,rent:'$949',min:999,max:1099,sources:['Rent','Redfin'],status:'ok',note:'刊登稱網路與 flat-rate utilities；通勤較遠。'},
+      {name:'VERVE Tempe',address:'1011 E Orange St, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:.7,rent:'$999 total price',min:1059,max:1129,sources:['Apartments'],status:'ok',note:'12-month lease；required fees 已列入。'},
+      {name:'Canvas',address:'1010 E Orange St, Tempe, AZ 85281',type:'student',label:'4BR student housing',distance:.6,rent:'$999 / 人',min:1059,max:1159,sources:['Apartments','ForRent'],status:'verify',note:'ASU 東側；確認 utility cap 與 parking。'},
+      {name:'University Pointe',address:'919 E Lemon St, Tempe, AZ 85281',type:'studio',label:'Studio',distance:.5,rent:'$899+',min:1079,max:1249,sources:['Apartments'],status:'verify',note:'離校近；廣告有 1 month free。'},
+      {name:'Sentry Tempe',address:'3730 S Mill Ave, Tempe, AZ 85282',type:'studio',label:'Studio · 375 sqft',distance:3.0,rent:'$918–$942 total',min:1068,max:1222,sources:['Apartments','ForRent','HotPads','Redfin'],status:'ok',note:'刊登為 total price；另加用量型費用。'},
+      {name:'Onnix Apartments',address:'1500 E Broadway Rd, Tempe, AZ 85282',type:'studio',label:'Studio · 443 sqft',distance:1.4,rent:'$951 total',min:1101,max:1231,sources:['Realtor','Rent','Redfin'],status:'ok',note:'價格跨站一致；確認網路與 parking。'},
+      {name:'Studio 710',address:'710 S Hardy Dr, Tempe, AZ 85281',type:'studio',label:'Studio · 350 sqft',distance:1.1,rent:'$949',min:1129,max:1299,sources:['Apartments','Realtor','Rent','HotPads','Trulia','Redfin'],status:'ok',note:'跨站資料完整；確認 specials 與 fees。'},
+      {name:'The Place of Tempe',address:'607–627 W 19th St, Tempe, AZ 85281',type:'studio',label:'Studio',distance:1.1,rent:'$950',min:1130,max:1300,sources:['Apartments','ForRent'],status:'verify',note:'確認 AC、water/trash 與 laundry。'},
+      {name:'Emerson Park',address:'1701 E Don Carlos Ave, Tempe, AZ 85281',type:'studio',label:'Studio · 410 sqft',distance:1.4,rent:'$970',min:1150,max:1320,sources:['Apartments','ForRent','Rent','HotPads','Trulia','Redfin'],status:'verify',note:'Facebook 對方身分與分租權須向 office 核對。'},
+      {name:'Westmount Downtown Tempe',address:'615 S Hardy Dr, Tempe, AZ 85281',type:'studio',label:'1BR · 600 sqft',distance:1.1,rent:'$994 total',min:1144,max:1274,sources:['Realtor','ForRent','Rent','HotPads','Redfin'],status:'ok',note:'2 months free；確認優惠後續租金。'},
+      {name:'312 S Wilson St（兩人分攤）',address:'312 S Wilson St, Tempe, AZ 85281',type:'room',label:'Private room · 2BR/1BA',distance:1.1,rent:'$700–$750 / 人',min:815,max:960,sources:[],status:'verify',note:'私人來源；必須有人共同簽約。'},
+      {name:'1115 E Lemon St',address:'1115 E Lemon St, Tempe, AZ 85281',type:'room',label:'Private room',distance:.8,rent:'$800 utilities included',min:815,max:840,sources:[],status:'risk',note:'看房前要求 $100；未經官方驗證不要付款。'}
+    ];
+    const typeFilter=document.querySelector('#type-filter'), priceFilter=document.querySelector('#price-filter'), distanceFilter=document.querySelector('#distance-filter');
+    const body=document.querySelector('#listing-body'), list=document.querySelector('#location-list'), frame=document.querySelector('#map-frame'), mapLink=document.querySelector('#open-map');
+    let selected='Gateway at Tempe';
+    const esc=s=>s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    const mapUrl=address=>'https://www.google.com/maps?q='+encodeURIComponent(address)+'&output=embed';
+    const mapOpen=address=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);
+    function filtered(){return listings.filter(x=>(typeFilter.value==='all'||x.type===typeFilter.value)&&x.min<=+priceFilter.value&&x.distance<=+distanceFilter.value).sort((a,b)=>a.min-b.min);}
+    function choose(name){selected=name; const item=listings.find(x=>x.name===name); frame.src=mapUrl(item.address); mapLink.href=mapOpen(item.address); render();}
+    function render(){const rows=filtered(); if(!rows.some(x=>x.name===selected)&&rows[0]) selected=rows[0].name; const active=listings.find(x=>x.name===selected); if(active){frame.src=mapUrl(active.address);mapLink.href=mapOpen(active.address)}
+      document.querySelector('#count').textContent=`顯示 ${rows.length} / ${listings.length} 間`;
+      document.querySelector('#best-price').textContent=rows.length?`$${Math.min(...rows.map(x=>x.min)).toLocaleString()}`:'—';
+      document.querySelector('#near-count').textContent=rows.filter(x=>x.distance<=1).length;
+      document.querySelector('#empty').hidden=rows.length>0;
+      body.innerHTML=rows.map((x,i)=>`<tr class="${x.name===selected?'selected':''}" data-name="${esc(x.name)}"><td><span class="property">${i+1}. ${esc(x.name)}</span><span class="address">${esc(x.address)}</span></td><td>${esc(x.label)}</td><td>${x.distance.toFixed(1)} mi</td><td>${esc(x.rent)}</td><td><span class="total">$${x.min.toLocaleString()}–$${x.max.toLocaleString()}</span></td><td><span class="source-links">${x.sources.length?x.sources.map(s=>`<a href="${sourceUrls[s]}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${s}</a>`).join(''):'私人來源'}</span></td><td><span class="status ${x.status}">${x.status==='ok'?'資料較完整':x.status==='risk'?'高風險':'待確認'}</span><span class="address">${esc(x.note)}</span></td></tr>`).join('');
+      list.innerHTML=rows.map((x,i)=>`<button class="location-item ${x.name===selected?'active':''}" data-name="${esc(x.name)}"><span class="pin">${i+1}</span><span><span class="loc-name">${esc(x.name)}</span><span class="loc-address">${esc(x.address)}</span></span><span class="loc-distance">${x.distance.toFixed(1)} mi</span></button>`).join('');
+      document.querySelectorAll('[data-name]').forEach(el=>el.addEventListener('click',()=>choose(el.dataset.name)));
+    }
+    [typeFilter,priceFilter,distanceFilter].forEach(el=>el.addEventListener('change',render)); render();
+  </script>
 </body>
 </html>
