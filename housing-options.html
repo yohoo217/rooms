@@ -59,7 +59,10 @@
       '850 S River Dr Room 2':'$860–$970 = $800 房租 + $60–$170 utilities；短租另加 $50',
       '1015 S Stanley Pl Unit 26':'$815–$910 = $700 房租 + $115–$210 每月雜費（暫估）'
     };
-    [...facebook,...platforms].forEach(item=>{if(monthlyTotalFormulas[item.n])item.total=monthlyTotalFormulas[item.n]});
+    const detailUpdates={
+      '1024 S Ve Ella Cir Unit 214':'已確認：一年租期為 2026/8/10–2027/8/10；你預計 8/15 抵達，因此若日期不改會多付 5 天。長租一年可選固定 $750／月，或支付實際總帳單的 50%；短租固定 $750／月。若選固定方案，$750 已包含房租、utilities 與 common charges，但洗烘衣另計。大樓內有洗衣機與烘衣機；洗衣每次 $2，可用 laundry app 或卡付款，對方未回答設備確切位置與烘衣價格。短租時雙方均須提前 2 個月通知。押金 $500：短租稱全額退還，但未回答退還期限；長租則由 leasing office 依損壞情況決定退款。對方是目前唯一 leaseholder，表示管理處允許出租第二間房；短租或長租都可以支付 $250–$300 加入正式租約，加名後可直接在管理系統查看資料。若加名，初始一次性支出約為 $1,500–$1,550（首月 $750＋押金 $500＋加名費 $250–$300）。對方可提供其名下租約，並表示可直接聯絡 leasing office；試住後繼續承租，租金及條件不變。對方稱即使他離開，你的 agreement 仍按原條件有效，但此點必須由 leasing office 書面確認。對於「先看完整協議並向管理處確認後才付款」，對方沒有明確承諾，只說加名後可在系統查看；因此付款前仍應完成加名、取得管理處書面確認並核對正式租約。房間無家具，只有 built-in closet；兩人同住、可正常煮飯、房內可飲酒、一次可有 1 位過夜訪客。浴室是否共用、臥室門能否上鎖仍未回答。'
+    };
+    [...facebook,...platforms].forEach(item=>{if(monthlyTotalFormulas[item.n])item.total=monthlyTotalFormulas[item.n];if(detailUpdates[item.n])item.note=detailUpdates[item.n]});
     const esc=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
     const map=a=>a.includes('地址未')||a.includes('地址未公開')?'':`<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a)}" target="_blank" rel="noopener">Google Maps ↗</a>`;
     const shuttleInfo={
