@@ -49,6 +49,17 @@
       {n:'850 S River Dr Room 2',a:'850 S River Dr, Tempe, AZ 85281',t:'Private room · 3BR/3BA',d:'約 1.7 mi',r:'$800／房',total:'約 $860–$970',links:[['Highrises.com','https://www.highrises.com/rentals/details/850-S-River-Dr-2_Tempe_AZ_85281_M94594-96460'],['Redfin','https://www.redfin.com/AZ/Tempe/850-S-River-Dr-85281/unit-2/home/200471972']],s:'verify',note:'刊登頁標示 available now、押金 $800；utilities 每人通常 $60–$170、最短 6 個月，少於 12 個月每月另加 $50。'},
       {n:'1015 S Stanley Pl Unit 26',a:'1015 S Stanley Pl Unit 26, Tempe, AZ 85281',t:'2BR/1BA · 須確認是否按房出租',d:'約 1.1 mi',r:'$700',total:'約 $815–$910（暫估）',links:[['Redfin','https://www.redfin.com/AZ/Tempe/1015-S-Stanley-Pl-85281/unit-26/home/202315298']],s:'verify',note:'平台列為 2026/8/1 可入住；$700 是否為整戶或每房、utilities、押金與租期都必須先確認。'}
     ];
+    const monthlyTotalFormulas={
+      '1024 S Ve Ella Cir Unit 214':'$750 + 洗烘衣費（固定方案已含房租、utilities、common charges）',
+      '3941 S Mill Ave private room':'$793–$853 = $700 房租 + $93–$153 水電網路',
+      '1025 S Siesta Ln':'$965–$1,060 = $850 房租 + $115–$210 每月雜費',
+      '312 S Wilson St（兩人分攤）':'$815–$960／人 = $700–$750 房租 + $115–$210 每月雜費',
+      '820 W 9th St student room':'$814–$909 = $699 房租 + $115–$210 每月雜費',
+      '3300 S Terrace Rd Room 6':'$760–$870 = $700 房租 + $60–$170 utilities；短租另加 $50',
+      '850 S River Dr Room 2':'$860–$970 = $800 房租 + $60–$170 utilities；短租另加 $50',
+      '1015 S Stanley Pl Unit 26':'$815–$910 = $700 房租 + $115–$210 每月雜費（暫估）'
+    };
+    [...facebook,...platforms].forEach(item=>{if(monthlyTotalFormulas[item.n])item.total=monthlyTotalFormulas[item.n]});
     const esc=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
     const map=a=>a.includes('地址未')||a.includes('地址未公開')?'':`<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a)}" target="_blank" rel="noopener">Google Maps ↗</a>`;
     const shuttleInfo={
